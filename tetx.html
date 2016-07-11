@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>-->
+	<head>
+  		<meta charset="utf-8">
+	</head>
+<body>
+
+<div class="text">text 1</div>
+<div class="text">text 2</div>
+<div class="text">text 3</div>
+
+</body>
+</html>
+
+
+<script>
+var name = "text"
+
+Events(name);
+function Events(className){
+	
+	function insertAfter(newNode, referenceNode) {
+	    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+	};
+
+	function blog(element){
+		return function ()
+		{
+			console.log(element);
+		};
+	};
+
+	var elements = document.getElementsByClassName(className);
+	for(var i=0; i < elements.length; i++ ){
+		var button = document.createElement("a");
+		button.href = "#";
+		insertAfter(button, elements[i]);
+	//	elements[i].appendChild(button);
+		button.innerText = "click" + i;
+		button.onclick = blog(elements[i]);
+		//console.log(button.onclick);
+	}
+}
+
+</script>
+
+
+
+<style>
+</style>

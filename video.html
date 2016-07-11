@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<head>
+  		<meta charset="utf-8">
+	</head>
+
+<body>
+
+<div id="video_content">
+	<div id="video_block"></div>
+
+	<div id="progress_bar"></div>
+</div>
+
+</body>
+</html>
+
+<script>
+var currentTime1 = document.createElement('div');
+currentTime1.id = "current_time1";
+currentTime1.className = "current-time";
+
+var currentTime2 = document.createElement('div');
+currentTime2.id = "current_time2";
+currentTime2.className = "current-time";
+
+var currentTime3 = document.createElement('div');
+currentTime3.id = "current_time3";
+currentTime3.className = "current-time";
+
+var video1 = document.createElement('video');
+var src1 = document.createElement('source');
+src1.src = "http://upload.wikimedia.org/wikipedia/commons/7/79/Big_Buck_Bunny_small.ogv"
+video1.appendChild(src1);
+video1.id = "video1";
+video1.controls = true;
+video1.style.width = '30%';
+video1.className = "video";
+document.getElementById("video_block").appendChild(video1);
+
+
+var video2 = document.createElement('video');
+var src2 = document.createElement('source');
+src2.src = "http://upload.wikimedia.org/wikipedia/commons/4/48/Juno_Captures_the_%27Roar%27_of_Jupiter.webm"
+video2.appendChild(src2);
+video2.id = "video2";
+video2.controls = true;
+video2.style.width = '30%';
+video2.className = "video";
+document.getElementById("video_block").appendChild(video2);
+
+
+var video3 = document.createElement('video');
+var src3 = document.createElement('source');
+src3.src = "http://upload.wikimedia.org/wikipedia/commons/7/79/Big_Buck_Bunny_small.ogv"
+video3.appendChild(src3);
+video3.id = "video3";
+video3.controls = true;
+video3.style.width = '30%';
+video3.className = "video";
+document.getElementById("video_block").appendChild(video3);
+
+
+
+$("#progress_bar").hide();
+
+video2.onloadedmetadata, video1.onloadedmetadata, video3.onloadedmetadata = function() {
+    createTimeline();
+    $("#progress_bar").show("slow");
+};
+
+/*
+var i = setInterval(function() {
+	if(video1.readyState > 0 && video2.readyState > 0 && video3.readyState > 0) {
+		createTimeline();
+		clearInterval(i);
+	}
+}, 200);
+*/
+
+function createTimeline(){
+	var duration1 = video1.duration;
+	var duration2 = video2.duration;
+	var duration3 = video3.duration;
+
+	var sum = duration1 + duration2 + duration3;
+
+	var persent1 = ((duration1*100/sum));
+	var persent2 = ((duration2*100/sum));
+	var persent3 = 100-persent1-persent2;
+
+	var progress1 = document.createElement('div');
+	progress1.className = "progress-bar-1 progress";
+	progress1.style.width = persent1 + '%';
+	document.getElementById("progress_bar").appendChild(progress1);
+
+
+	var progress2 = document.createElement('div');
+	progress2.className = "progress-bar-2 progress";
+	progress2.style.width = persent2 + '%';
+	document.getElementById("progress_bar").appendChild(progress2);
+
+
+	var progress3 = document.createElement('div');
+	progress3.className = "progress-bar-3 progress";
+	progress3.style.width = persent3 + '%';
+	document.getElementById("progress_bar").appendChild(progress3);
+
+
+	progress1.appendChild(currentTime1);
+	progress2.appendChild(currentTime2);
+	progress3.appendChild(currentTime3);
+	showCurrentTime();
+}
+
+
+
+
+
+function showCurrentTime(){
+	setInterval( function() {
+		document.getElementById("current_time1").style.width = (100*video1.currentTime/video1.duration) + "%";
+		document.getElementById("current_time2").style.width = (100*video2.currentTime/video2.duration) + "%";
+		document.getElementById("current_time3").style.width = (100*video3.currentTime/video3.duration) + "%";
+		console.log(video1.currentTime);
+	}, 300);
+
+}
+
+
+
+</script>
+
+<style>
+.current-time{
+	background: burlywood;
+    height: inherit;
+    /* position: absolute; */
+    /* display: block; */
+}
+#video_content{
+	width: 1000px;
+	margin: 0 auto;
+	padding: 15px;
+	background: #e7eeec;
+}
+
+#progress_bar{
+    height: 20px;
+    background-color: #84b9b8;
+    width: 100%;
+}
+
+.progress-bar-1{
+	height: inherit;
+	background-color: red;
+}
+
+.progress-bar-2{
+	height: inherit;
+	background-color: green;
+}
+
+.progress-bar-3{
+	height: inherit;
+	background-color: blue;
+}
+
+.progress{
+    display: inline-block;
+}
+
+.video {
+    margin: 0 15px;
+}
+
+</style>

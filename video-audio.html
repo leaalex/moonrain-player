@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>-->
+<link rel="stylesheet" type="text/css" href="normalize.css">
+	<head>
+  		<meta charset="utf-8">
+	</head>
+<body>
+
+
+<div class="media-container">
+	<div class="video-block">
+	<video controls width="100%"> 
+  		<source src=http://techslides.com/demos/sample-videos/small.mp4>
+	</video>
+	</div>
+
+	<div class="controls">
+		<div class="play-pause"></div><div class="progress-block">
+			<span class="progress video-progress"></span>
+			<span class="progress audio-progress"></span>
+			<span class="progress presentation-progress"></span>
+		</div><div class="volume"></div>
+	</div>
+
+</div>
+
+</body>
+</html>
+
+
+<script>
+
+var controls = [];
+
+</script>
+
+
+
+<style>
+.video-block{
+text-align: center;
+}
+
+.media-container{
+	background-color: #6e6e6e;
+	width: 700px;
+	/**/
+}
+
+.controls{
+	height: 30px;
+    background-color: beige;
+}
+
+.progress{
+	height: 10px;
+} 
+
+.video-progress{
+	background-color: red;
+}
+
+.audio-progress{
+	background-color: green;
+}
+
+.presentation-progress{
+	background-color: blue;
+}
+
+.play-pause{
+	height: 30px;
+	width: 30px;
+	background-color: black;
+}
+
+.progress-block{
+    width: 570px;
+
+	height: 30px;
+}
+
+.volume{
+	width: 100px;
+	background-color: cadetblue;
+	height: 30px;
+}
+
+.controls div{
+	display: inline-block;
+}
+
+.controls div span{
+	display: block;
+}
+
+</style>
