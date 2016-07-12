@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  		<meta charset="utf-8">
+	</head>
+<body>
+
+
+<div class="media-container" data-src="element1">
+</div>
+
+<div class="media-container" data-src="element1">
+</div>
+
+</body>
+</html>
+
+
+<script>
+
+
+
+function addControls(element){
+
+	var blockMedia = document.createElement("div");
+	blockMedia.setAttribute("class", "blockMedia");
+	element.appendChild(blockMedia);
+
+	var blockControls = document.createElement("div");
+	blockControls.setAttribute("class", "controls");
+	element.appendChild(blockControls);
+
+	var playpause = document.createElement("div");
+	playpause.setAttribute("class", "playpause")
+	playpause.innerText = "Play";
+	blockControls.appendChild(playpause);
+
+	var stop = document.createElement("div");
+	stop.setAttribute("class", "stop")
+	stop.innerText = "Stop";
+	blockControls.appendChild(stop);
+
+	var previous = document.createElement("div");
+	previous.setAttribute("class", "previous")
+	previous.innerText = "Previous";
+	blockControls.appendChild(previous);
+
+	var next = document.createElement("div");
+	next.setAttribute("class", "next")
+	next.innerText = "Next";
+	blockControls.appendChild(next);
+
+	var progress = document.createElement("div");
+	progress.setAttribute("class", "progress")
+	progress.innerText = "Progress";
+	blockControls.appendChild(progress);
+
+	var volume = document.createElement("div");
+	volume.setAttribute("class", "volume")
+	volume.innerText = "Volume";
+	blockControls.appendChild(volume);
+}
+
+
+function setAttributeList(element, object){
+	for(var attr in object){
+		element.setAttribute(attr, object[attr])
+	}
+}
+
+var element = document.getElementsByClassName("media-container")[0]
+addControls(element)
+</script>
+<style>
+	.blockMedia{
+		width: 1280px;
+		height: 720px;
+		background: #e6e6e6;
+	}
+	.controls{
+		width: 1280px;
+		height: 40px;
+		background: #d8d8d8;
+		position: relative;
+	}
+	.controls div{
+		display: inline-block;
+		height: inherit;
+		position: absolute;
+
+	}
+	.playpause{
+		left: 0px;
+		width: 100px;
+		background: #444;
+	}
+	.stop{
+		left: 100px;
+		width: 100px;
+		background: #888;
+	}
+	.previous, .next{
+		left: 200px;
+		width: 100px;
+		background: red;
+	}
+	.progress{
+		left: 300px;
+		right: 50px;
+		display: inline-flex;
+		background: #fff;
+	}
+	.volume{
+		right: 0;
+		width: 50px;
+		background: green;
+	}
+
+</style>
