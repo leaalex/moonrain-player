@@ -17,6 +17,33 @@
 
 
 <script>
+function createTimeline(element, arrayURL) {
+	function consolelog(el){
+		return function(){console.log(el.duration)}
+	}
+
+
+		var blockHide = document.createElement("div");
+		var arrayElements = [];
+		blockHide.setAttribute("class", "blockHide");
+		arrayURL.forEach(function(elementURL){
+			var videoForTimeline = document.createElement("video");
+			videoForTimeline.controls = false;
+			videoForTimeline.preload = "metadata";
+			var source = document.createElement("source");
+			source.src = elementURL;
+			source.type = "video/mp4";
+			videoForTimeline.appendChild(source);
+			videoForTimeline.onloadedmetadata = consolelog(videoForTimeline);
+			blockHide.appendChild(videoForTimeline)
+			arrayElements.push(videoForTimeline);
+		})
+		element.appendChild(blockHide)
+
+}
+
+
+
 function addVideo(element, setting, url){
 	if (setting == undefined) setting = {controls:false};
 	if(url == undefined) url = {mp4:"url.mp4",webm:".url.WebM",ogg:"url.ogv"};
@@ -41,6 +68,8 @@ function addControls(element){
 	blockMedia.setAttribute("class", "blockMedia");
 	addVideo(blockMedia,{controls:false},{mp4:"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",webm:"http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm",ogg:"http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv"});
 	element.appendChild(blockMedia);
+
+	createTimeline(element, ["http://upload.wikimedia.org/wikipedia/commons/4/48/Juno_Captures_the_%27Roar%27_of_Jupiter.webm","http://upload.wikimedia.org/wikipedia/commons/7/79/Big_Buck_Bunny_small.ogv","http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"]);
 
 	var blockControls = document.createElement("div");
 	blockControls.setAttribute("class", "controls");
@@ -113,6 +142,10 @@ addControls(elements[i])
 		height: 720px;
 		background: #e6e6e6;
 	}
+	.blockHide{
+			display: none;
+	}
+
 	.controls{
 		width: 1280px;
 		height: 40px;
