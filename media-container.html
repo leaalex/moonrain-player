@@ -9,7 +9,7 @@
 <div class="media-container" data-src="element1">
 </div>
 
-<div class="media-container" data-src="element1">
+<div class="media-container" data-src="element2">
 </div>
 
 </body>
@@ -17,6 +17,25 @@
 
 
 <script>
+function addVideo(element){
+	var setting = {controls:false};
+	var url = {mp4:"url.mp4",webm:".url.WebM",ogg:"url.ogv"};
+	var video = document.createElement("video");
+	video.setAttribute("controls", setting.controls);
+	for(var type in url){
+		console.log(url[type]);
+
+
+
+		var source = document.createElement("source");
+
+		source.setAttribute("src", url[type]);
+		source.setAttribute("type", "video/"+type);
+		
+		video.appendChild(source);
+	}
+	element.appendChild(video);
+}
 
 
 
@@ -52,13 +71,31 @@ function addControls(element){
 
 	var progress = document.createElement("div");
 	progress.setAttribute("class", "progress")
-	progress.innerText = "Progress";
+	//progress.innerText = "Progress";
+
+		var progressVideo = document.createElement("span");
+		progressVideo.setAttribute("class", "progressVideo");
+		progressVideo.innerText = "Video";
+		progress.appendChild(progressVideo);
+
+		var progressAudio = document.createElement("span");
+		progressAudio.setAttribute("class", "progressAudio");
+		progressAudio.innerText = "Audio";
+		progress.appendChild(progressAudio);
+
+		var progressPresentation = document.createElement("span");
+		progressPresentation.setAttribute("class", "progressPresentation");
+		progressPresentation.innerText = "Presentation";
+		progress.appendChild(progressPresentation);
+
 	blockControls.appendChild(progress);
 
 	var volume = document.createElement("div");
 	volume.setAttribute("class", "volume")
 	volume.innerText = "Volume";
 	blockControls.appendChild(volume);
+
+	playpause.onclick = function(){ console.log(element.getAttribute("data-src")) }
 }
 
 
@@ -68,8 +105,10 @@ function setAttributeList(element, object){
 	}
 }
 
-var element = document.getElementsByClassName("media-container")[0]
-addControls(element)
+var elements = document.getElementsByClassName("media-container")
+for (var i=0; i<elements.length;i++){
+addControls(elements[i])
+}
 </script>
 <style>
 	.blockMedia{
@@ -110,6 +149,13 @@ addControls(element)
 		display: inline-flex;
 		background: #fff;
 	}
+	.progress span{
+		display: block;
+		height: 10px;
+		margin: 2px 0px;
+		background: gold;
+	}
+
 	.volume{
 		right: 0;
 		width: 50px;
