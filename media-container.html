@@ -17,21 +17,17 @@
 
 
 <script>
-function addVideo(element){
-	var setting = {controls:false};
-	var url = {mp4:"url.mp4",webm:".url.WebM",ogg:"url.ogv"};
+function addVideo(element, setting, url){
+	if (setting == undefined) setting = {controls:false};
+	if(url == undefined) url = {mp4:"url.mp4",webm:".url.WebM",ogg:"url.ogv"};
 	var video = document.createElement("video");
-	video.setAttribute("controls", setting.controls);
+	video.controls = setting.controls;
+	video.width = 1280;
+	video.height = 720;
 	for(var type in url){
-		console.log(url[type]);
-
-
-
 		var source = document.createElement("source");
-
 		source.setAttribute("src", url[type]);
 		source.setAttribute("type", "video/"+type);
-		
 		video.appendChild(source);
 	}
 	element.appendChild(video);
@@ -43,6 +39,7 @@ function addControls(element){
 
 	var blockMedia = document.createElement("div");
 	blockMedia.setAttribute("class", "blockMedia");
+	addVideo(blockMedia,{controls:false},{mp4:"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",webm:"http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm",ogg:"http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv"});
 	element.appendChild(blockMedia);
 
 	var blockControls = document.createElement("div");
@@ -138,13 +135,18 @@ addControls(elements[i])
 		width: 100px;
 		background: #888;
 	}
-	.previous, .next{
+	.previous{
 		left: 200px;
 		width: 100px;
 		background: red;
 	}
-	.progress{
+	.next{
 		left: 300px;
+		width: 100px;
+		background: red;
+	}
+	.progress{
+		left: 400px;
 		right: 50px;
 		display: inline-flex;
 		background: #fff;
