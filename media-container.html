@@ -9,8 +9,8 @@
 <div class="media-container" data-src="element1">
 </div>
 
-<div class="media-container" data-src="element2">
-</div>
+<!--<div class="media-container" data-src="element2">
+</div>-->
 
 </body>
 </html>
@@ -18,8 +18,8 @@
 
 <script>
 function createTimeline(element, arrayURL) {
-	function consolelog(el){
-		return function(){console.log(el.duration)}
+	function consolelog(url, el){
+		return function(){console.log(url, el.duration)}
 	}
 
 
@@ -34,8 +34,8 @@ function createTimeline(element, arrayURL) {
 			source.src = elementURL;
 			source.type = "video/mp4";
 			videoForTimeline.appendChild(source);
-			videoForTimeline.onloadedmetadata = consolelog(videoForTimeline);
 			blockHide.appendChild(videoForTimeline)
+			videoForTimeline.onloadedmetadata = function() {console.log(elementURL, videoForTimeline.duration)};
 			arrayElements.push(videoForTimeline);
 		})
 		element.appendChild(blockHide)
@@ -137,6 +137,7 @@ addControls(elements[i])
 }
 </script>
 <style>
+
 	.blockMedia{
 		width: 1280px;
 		height: 720px;
