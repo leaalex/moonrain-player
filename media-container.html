@@ -17,6 +17,85 @@
 
 
 <script>
+
+
+
+
+function Constructor() {
+/* Список переменных */
+	this.className = "media-container";
+	this.MCObject;
+	this.MCList = {};
+
+/* Настройки */
+ 	this.setting = {};
+
+/* Функции */
+
+	// Генерация ID
+	this.genID = function(){
+		return 'id' + Math.random().toString(16).substr(2, 8).toUpperCase();
+	};
+
+	// Функция полоучения Data-* и преобразования в объект
+	this.getDataPropertis = function(){
+		var properties = {};
+		return properties;
+	};
+
+	// Получение JSON'а из data-url
+	this.getJSON = function(){
+		return JSON;
+	};
+
+	// Функция преобразования JSON в Playlist
+	this.JSONtoPlaylist = function(JSON){
+		var playlistObject = {};
+		return playlistObject;
+	};
+
+	// Функция получения и наполнение MCObject
+	this.getMCObject = function(className){
+		var object = getElementsByClassName(className)[0];
+		return object;
+	};
+
+	// Функция получения и наполнение MCList
+	this.getMCList = function(){
+		var objectList = getElementsByClassName(className);
+		this.MCObject = objectList;
+		return objectList
+	};
+	
+
+	// Функция создания элементов управления
+	this.createControls = function(){}
+
+
+/* Функции отслеживающие события */
+	// Следим за появлением нового элемета с классом media-container
+	this.watchForNewElement  = function(){
+
+	}
+	// Следить за элементами управления
+	this.watchControls = function(DOMElement){
+		var ststus = {};
+
+		return status;
+	}
+
+/* Инициализация */
+	this.init(){
+
+	}
+}
+
+
+
+
+
+
+
 function createTimeline(element, arrayURL) {
 	function consolelog(url, el){
 		return function(){console.log(url, el.duration)}
