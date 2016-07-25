@@ -1,0 +1,117 @@
+<html>
+	<head>
+  		<meta charset="utf-8">
+	</head>
+<body>
+
+
+<div class="media-container" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/">
+</div>
+
+<div class="media-container" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/">
+</div>
+
+</body>
+</html>
+
+
+<script type="text/javascript">
+
+function Constructor(className){
+/*CONSOLE*/  console.log(">> status: Запуск конструктора");
+  this.className = className || "media-container";
+  this.MCList = [];
+
+
+
+
+  (function list(){
+/*CONSOLE*/  console.log(">> status: function list start");
+    var elementList = document.getElementsByClassName(this.className);
+/*CONSOLE*/  console.log(">> status: className: "+this.className);
+    for (var i = 0; i < elementList.length; i++){
+      var properties ={
+        "id":genID("MRP"),
+        "html":elementList[i],
+        "src":elementList[i].dataset.src,
+        "urlJSON":i+".json",
+        "JSON":"",
+        "urlVideo":[],
+        "urlAudio":[],
+      }
+      this.MCList.push(properties);
+    };
+  }.bind(this))();
+
+  this.MCList.forEach(getJSON)
+
+  // Функция перебора HTMLCollection и NodeList и выполене функции action
+  function forEach(collection, action) {
+      collection = collection || {};
+      for (var i = 0; i < collection.length; i++)
+          action(collection[i]);
+      };
+
+  // Функция генерации ID
+  function genID(value) {
+    var value = value+"_" || "id"
+      return value + Math.random().toString(16).substr(2, 8).toUpperCase();
+  };
+
+  // Получение JSON'а из data-url
+	function getJSON(object){
+    var urlJSON = object.urlJSON
+    var request = new XMLHttpRequest();
+    request.open('GET', urlJSON);
+    request.onreadystatechange = function(e) {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+              object.JSON =  this.responseText;
+              console.log("Загрузки успешно завершена: " + urlJSON)
+            }
+            else {
+              console.log("Ошибка загрузки: " + urlJSON)
+            }
+        }
+    }
+    request.send(null);
+	};
+
+  function createVideoBlock(urlVideo){
+    var video = document.createElement("video");
+    var source = document.createElement("source");
+    video.appendChild(video);
+  }
+
+
+
+
+
+
+
+
+
+
+
+  function MediaElement(self){ this.x = console.log(self)};
+
+  this.el = new MediaElement("this");
+
+
+
+
+var self = this;
+  var value = value;
+  this.Obj = new function(self){
+    this.value = genID();
+    console.log(self.value, value)
+  }(self)
+  this.init = function(){
+    console.log(">status: inisialization");
+  }
+
+
+}
+
+
+</script>
