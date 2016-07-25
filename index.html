@@ -29,6 +29,13 @@ function Constructor(selector){
     return array;
   }
 
+
+  function genID(value){
+    var value = value+"_" || "id"
+      return value + Math.random().toString(16).substr(2, 8).toUpperCase();
+  };
+
+
   function getObjectJSON(urlJSON){
     var objectJSON = {};
     var request = new XMLHttpRequest();
@@ -49,7 +56,51 @@ function Constructor(selector){
   };
 
 
+  function mediaObjects(objectJSON, type, property){
+    var elements = [];
+    objectJSON[type].forEach(function(element){
+        elements.push(element[property])
+    });
+    return elements;
+  };
 
+  function createMediaELement(type, name){
+    var element = document.createElement(type);
+    var source = document.createElement("source");
+    source.src = src + name;
+    return element.appendChild(source);
+
+  };
+
+  function createElement(name, id, classList, attributes){
+
+    var element = document.createElement(name);
+    if (id) element.id =id;
+    if (className) element.classList = classList;
+    if (attributes){
+      for (attribute in attributes){
+        element.setAttribute(attribute, attributes[attribute])
+      }
+    }
+    return element;
+  };
+
+
+
+
+  function createPlayer(mediaContainer){
+    var src = mediaContainer.dataset.src;
+    var objectJSON = getObjectJSON("0.json"); //дописать комментарий она прям для людей еще напечатаю очень удобно СПАСИБО!
+
+    var videoNames = mediaObjects(objectJSON, "video", filename);
+    var audioNames = mediaObjects(objectJSON, "audio", filename);
+
+    var div = createElement("div", genID("blockMedia"),  "blockMedia", {width:"auto"})
+    var div = createElement("div", genID("blockControls"), "blockControls",{})
+
+    
+
+  }
 
 
 
@@ -64,12 +115,16 @@ function Constructor(selector){
 
 
   this.init = function(){
-    console.log(getObjectJSON("1.json"));
 
-    var x = query(selector).forEach(function(element){element = element.dataset})
+    console.log(getObjectJSON("1.json"));
+    /*var x = query(selector).forEach(function(element){element = element.dataset})
     console.log(
       x
-    );
+    );*/
+    var x = getObjectJSON("0.json");
+    console.log( mediaObjects(x, "video", "filename") );
+
+
   };
 
 
