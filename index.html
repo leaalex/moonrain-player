@@ -17,9 +17,9 @@
 
 <script type="text/javascript">
 function Constructor(selector){
-
+	// Седектор по которому происходит поиск элементов для подключения плеера
   var selector = selector || ".media-container";
-
+	// Функция получает селектор возвращает массив обектов. В массие может быть один элемент
   function query(selector){
     var array = [];
     var elements = document.querySelectorAll(selector);
@@ -28,14 +28,12 @@ function Constructor(selector){
     };
     return array;
   }
-
-
+	// Функция гегенрации ID
   function genID(value){
     var value = value+"_" || "id"
       return value + Math.random().toString(16).substr(2, 8).toUpperCase();
   };
-
-
+	// Функция получение JSON'а по URL и преобрзование его в объект
   function getObjectJSON(urlJSON){
     var objectJSON = {};
     var request = new XMLHttpRequest();
@@ -55,7 +53,7 @@ function Constructor(selector){
     return objectJSON;
   };
 
-
+	// Функция получения свойства каждого из элементов в нутри обекта
   function mediaObjects(objectJSON, type, property){
     var elements = [];
     objectJSON[type].forEach(function(element){
@@ -63,20 +61,23 @@ function Constructor(selector){
     });
     return elements;
   };
-
-  function createMediaELement(type, name){
+// Функция создания видео/аудео блока
+  function createMediaELement(type, name, src){
     var element = document.createElement(type);
+		element.controls = false;
+		element.preload = "metadata";
     var source = document.createElement("source");
     source.src = src + name;
-    return element.appendChild(source);
-
+		source.type = "video/webm";
+    element.appendChild(source);
+		return element;
   };
 
   function createElement(name, id, classList, attributes){
 
     var element = document.createElement(name);
     if (id) element.id =id;
-    if (className) element.classList = classList;
+    if (classList) element.classList = classList;
     if (attributes){
       for (attribute in attributes){
         element.setAttribute(attribute, attributes[attribute])
@@ -92,15 +93,26 @@ function Constructor(selector){
     var src = mediaContainer.dataset.src;
     var objectJSON = getObjectJSON("0.json"); //дописать комментарий она прям для людей еще напечатаю очень удобно СПАСИБО!
 
-    var videoNames = mediaObjects(objectJSON, "video", filename);
-    var audioNames = mediaObjects(objectJSON, "audio", filename);
+    var videoNames = mediaObjects(objectJSON, "video", "filename");
+console.log("Список имен видео получен:"+videoNames);
+    var audioNames = mediaObjects(objectJSON, "audio", "filename");
+console.log("Список имен audio получен:"+audioNames);
+    var blockMedia = createElement("div", genID("blockMedia"),  "blockMedia", {width:"auto"})
+console.log("Создано:"+ blockMedia);
+    var blockControls = createElement("div", genID("blockControls"), "blockControls");
+console.log("Создано:"+ blockControls);
+		var blockHide = createElement("div", genID("blockHide"),"blockHide");
+console.log("Создано:"+ blockHide);
+		videoNames.forEach(function(name){
+			blockHide.appendChild(createMediaELement("video", name, src))
+		});
+		mediaContainer.appendChild(blockMedia);
+		mediaContainer.appendChild(blockControls);
+		mediaContainer.appendChild(blockHide);
+	};
 
-    var div = createElement("div", genID("blockMedia"),  "blockMedia", {width:"auto"})
-    var div = createElement("div", genID("blockControls"), "blockControls",{})
 
-    
 
-  }
 
 
 
@@ -115,15 +127,8 @@ function Constructor(selector){
 
 
   this.init = function(){
-
-    console.log(getObjectJSON("1.json"));
-    /*var x = query(selector).forEach(function(element){element = element.dataset})
-    console.log(
-      x
-    );*/
-    var x = getObjectJSON("0.json");
-    console.log( mediaObjects(x, "video", "filename") );
-
+    var mediaContainer = query(selector);
+		createPlayer(mediaContainer[0]);
 
   };
 
