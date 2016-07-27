@@ -184,7 +184,7 @@ function Player(HTMLElement){
   this.playerList = [];
   this.init = function(){
     var mediaContainers = query(selector);
-    mediaContainers.forEach(function(element){ playerList.push(new Player(element))}.bind(this))
+    mediaContainers.forEach(function(element){ this.playerList.push(new Player(element))}.bind(this))
 
   };
 
