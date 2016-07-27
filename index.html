@@ -16,7 +16,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.4 'CreateMediaContainer'");
+console.log("v0.1.4 'new Player'");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -151,6 +151,9 @@ console.log("Создано:",blockHide);
 
 
 
+function Player(value){
+	console.log("экземпляр создан", value)
+}
 
 
 
@@ -160,6 +163,9 @@ console.log("Создано:",blockHide);
     var mediaContainers = query(selector);
 		createPlayer(mediaContainers[0]);
 
+
+		var el = [1,2,3,4,5,6]
+		el.forEach(function(value){new Player(value)})
   };
 
 
