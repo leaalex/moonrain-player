@@ -196,7 +196,7 @@ function Player(HTMLElement){
         object.filename = this.objectJSON.video[i].filename;
         //object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
-        console.log(object.duration);
+        /console.log(object.html.duration);
         elementArray[object.name] = object;
       }
     }
