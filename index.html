@@ -27,7 +27,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.29 'sort objects' ");
+console.log("v0.1.30 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -199,7 +199,7 @@ function Player(HTMLElement){
         elementArray[object.name] = object;
         
         object.html.onloadedmetadata = function(){
-          object.duration = this.duration;
+          object.duration = "this.duration";
           console.log(this.duration);
         }
 
@@ -217,7 +217,7 @@ function Player(HTMLElement){
         elementArray[object.name] = object;
 
         object.html.onloadedmetadata = function(){
-          object.duration = this.duration;
+          object.duration = "this.duration";
           console.log(this.duration);
         }
     }
