@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.16 'sort objects' ");
+console.log("v0.1.17 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -175,14 +175,25 @@ function Player(HTMLElement){
 
 
   this.sortObjects = function(){
-    var elementArray = [];
+    var elementArray = {};
     for(var i=0; i < this.objectJSON.video.length; i++){
         var object = {};
         object.name = this.objectJSON.video[i].instant;
+        object.type = 'video';
         object.filename = this.objectJSON.video[i].filename;
         object.html = "<video><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
-        elementArray.push(object);
+        elementArray[object.name] = object;
     }
+
+    for(var i=0; i < this.objectJSON.audio.length; i++){
+        var object = {};
+        object.name = this.objectJSON.audio[i].instant;
+        object.type = 'audio';
+        object.filename = this.objectJSON.audio[i].filename;
+        object.html = "<video><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
+        elementArray[object.name] = object;
+    }
+
     console.log(elementArray);
     return elementArray;
   }.bind(this);
