@@ -27,7 +27,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.31 'duration test' ");
+console.log("v0.1.31 'testing addEventListener' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -217,10 +217,11 @@ function Player(HTMLElement){
 
         elementArray[object.name] = object;
 
-        object.html.addEventListener("onloadedmetadata", function(){
-          object.duration = "this.duration";
-          console.log( object,this.duration);
-        });
+				object.html.addEventListener("loadedmetadata", function(){
+					return function(){
+						object.duration = this.duration;
+					}
+				});
     }
 
 
