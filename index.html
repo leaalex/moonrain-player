@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.24 'sort objects' ");
+console.log("v0.1.25 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -184,7 +184,8 @@ function Player(HTMLElement){
         object.name = this.objectJSON.video[i].instant;
         object.type = 'video';
         object.filename = this.objectJSON.video[i].filename;
-        object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
+        //object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
+        object.html = createElement("video", genID("video"),false, {width:300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
       }
     }
@@ -194,9 +195,12 @@ function Player(HTMLElement){
         object.name = this.objectJSON.audio[i].instant;
         object.type = 'audio';
         object.filename = this.objectJSON.audio[i].filename;
-        object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
+       // object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
+        object.html = createElement("video", genID("audio"),false, {width:300}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
+  
         elementArray[object.name] = object;
     }
+
 
     console.log(elementArray);
     return elementArray;
@@ -205,7 +209,6 @@ function Player(HTMLElement){
   this.mediaList = this.sortObjects();
   this.instants.forEach(function(element){ this.container.innerHTML += this.mediaList[element].html }.bind(this))
 } 
-  
   
   
   
