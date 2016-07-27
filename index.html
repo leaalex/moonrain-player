@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.14 'sort objects' ");
+console.log("v0.1.15 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -185,10 +185,9 @@ function Player(HTMLElement){
     }
     console.log(elementArray);
     return elementArray;
-  }
+  }.bind(this);
 
-  this.mediaList = this.sortObjects;
-
+  this.mediaList = this.sortObjects();
 } 
   
   
