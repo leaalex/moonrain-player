@@ -200,7 +200,7 @@ function Player(HTMLElement){
 
 				object.html.addEventListener("loadedmetadata", function(object){
 						object.duration = this.duration;
-				});
+				}(object));
 
       }
     }
@@ -217,7 +217,7 @@ function Player(HTMLElement){
 
 				object.html.addEventListener("loadedmetadata", function(object){
 						object.duration = this.duration;
-				});
+				}(object));
     }
 
 
