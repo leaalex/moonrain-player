@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.8 'metadata js' ");
+console.log("v0.1.9 'metadata js' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -170,7 +170,7 @@ function Player(HTMLElement){
   
   this.instants = mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"));
 
-  //this.instants.sort(function(a, b) {return a-b} );
+  this.instants.sort(function(a, b) {return a-b} );
 
 }
   
