@@ -5,10 +5,10 @@
 <body>
 
 
-<div id="id" class="media-container" data-wight="1280" data-src="https://crossorigin.me/https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/">
+<div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/">
 </div>
 
-<div class="media-container" data-widht="1280" data-src="https://crossorigin.me/https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/">
+<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/">
 </div>
 
 
@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.21 'sort objects' ");
+console.log("v0.1.22 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -166,7 +166,7 @@ function Player(HTMLElement){
   this.width = this.container.dataset.width || "";
   this.height = this.container.dataset.height || "";
 
-  this.objectJSON = getObjectJSON(this.src + "metadata.json");
+  this.objectJSON = getObjectJSON("https://crossorigin.me/" + this.src + "metadata.json");
   this.instants = (mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"))).sort(function(a, b) {return a-b} );
 
   
