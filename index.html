@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.10 'metadata js' ");
+console.log("v0.1.11 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -169,10 +169,24 @@ function Player(HTMLElement){
   this.objectJSON = getObjectJSON(this.src + "metadata.json");
   this.instants = (mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"))).sort(function(a, b) {return a-b} );
 
+  this.mediaList = this.sortObjects.bind(this);
+  //this.instants.forEach(function(element){  })  
 
 
 
-}
+  this.sortObjects = function(){
+    var elementArray = [];
+    for(element in this.objectJSON.video){
+        var object = {};
+        object.name = element.instant;
+        object.filename = element.filename;
+        object.html = "<video><source src='" + this.src + element.filename + "'></source></video>";
+        elementArray.push(object);
+    }
+    return elementArray;
+  }
+
+} 
   
   
   
