@@ -19,7 +19,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.6 'player List' ");
+console.log("v0.1.7 'player List' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -169,18 +169,19 @@ function Player(HTMLElement){
   this.height = this.container.dataset.height || "";
 
   this.objectJSON = getObjectJSON("0.json");
+  
+  this.instants = mediaObjects(objectJSON, "video", "instant") +  mediaObjects(objectJSON, "audio", "instant");
 
-
-
+  this.instants.sort(function(a,b){return a-b});
 
 }
-
-
-
-
-
-
   
+  
+  
+  
+  
+  
+    
   this.playerList = [];
   this.init = function(){
     var mediaContainers = query(selector);
@@ -189,5 +190,5 @@ function Player(HTMLElement){
   };
 
 
-}
+} 
 </script>
