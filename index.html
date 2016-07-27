@@ -198,11 +198,9 @@ function Player(HTMLElement){
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
 
-				object.html.addEventListener("loadedmetadata", function(){
-					return function(){
-	          object.duration = this.duration;
-					}
-        });
+				object.html.addEventListener("loadedmetadata", function(object){
+						object.duration = this.duration;
+				});
 
       }
     }
@@ -217,10 +215,8 @@ function Player(HTMLElement){
 
         elementArray[object.name] = object;
 
-				object.html.addEventListener("loadedmetadata", function(){
-					return function(){
+				object.html.addEventListener("loadedmetadata", function(object){
 						object.duration = this.duration;
-					}
 				});
     }
 
