@@ -4,7 +4,7 @@
 	</head>
 
   <style>
-  
+
   video{
     border: 1px solid;
     height: 250;
@@ -18,7 +18,7 @@
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/" style="background: aliceblue;margin-bottom: 100px;">
 </div>
 
-<!--<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;"> 
+<!--<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
 </div>
 -->
 
@@ -181,8 +181,8 @@ function Player(HTMLElement){
   this.objectJSON = getObjectJSON("https://crossorigin.me/" + this.src + "metadata.json");
   this.instants = (mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"))).sort(function(a, b) {return a-b} );
 
-  
-  //this.instants.forEach(function(element){  })  
+
+  //this.instants.forEach(function(element){  })
 
 
 
@@ -197,11 +197,11 @@ function Player(HTMLElement){
         //object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
-        
-        object.html.onloadedmetadata = function(){
+
+				object.html.addEventListener("onloadedmetadata", function(){
           object.duration = "this.duration";
           console.log( object,this.duration);
-        }
+        });
 
       }
     }
@@ -213,13 +213,13 @@ function Player(HTMLElement){
         object.filename = this.objectJSON.audio[i].filename;
        // object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
         object.html = createElement("video", genID("audio"), false, {width: 300}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
-  
+
         elementArray[object.name] = object;
 
-        object.html.onloadedmetadata = function(){
+        object.html.addEventListener("onloadedmetadata", function(){
           object.duration = "this.duration";
           console.log( object,this.duration);
-        }
+        });
     }
 
 
@@ -229,13 +229,13 @@ function Player(HTMLElement){
 
   this.mediaList = this.sortObjects();
   this.instants.forEach(function(element){ this.container.appendChild(this.mediaList[element].html) }.bind(this))
-} 
-  
-  
-  
-  
-  
-    
+}
+
+
+
+
+
+
   this.playerList = [];
   this.init = function(){
     var mediaContainers = query(selector);
@@ -244,5 +244,5 @@ function Player(HTMLElement){
   };
 
 
-} 
+}
 </script>
