@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.25 'sort objects' ");
+console.log("v0.1.26 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -207,7 +207,7 @@ function Player(HTMLElement){
   }.bind(this);
 
   this.mediaList = this.sortObjects();
-  this.instants.forEach(function(element){ this.container.innerHTML += this.mediaList[element].html }.bind(this))
+  this.instants.forEach(function(element){ this.container.appendChild(this.mediaList[element].html) }.bind(this))
 } 
   
   
