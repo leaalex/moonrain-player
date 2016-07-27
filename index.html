@@ -8,7 +8,10 @@
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/">
 </div>
 
-<div class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/">
+<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/">
+</div>
+
+<div class="media-container" data-widht="1280">
 </div>
 
 </body>
@@ -16,7 +19,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.4 'new Player test without this'");
+console.log("v0.1.5 'new Player test init' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -113,10 +116,13 @@ this.meta = {}
 
     var videoNames = mediaObjects(objectJSON, "video", "filename");
 console.log("Список имен видео получен:", videoNames);
+
     var time = mediaObjects(objectJSON, "video", "instant");
 console.log("Список имен audio получен:", time);
+
     var blockMedia = createElement("div", genID("blockMedia"),  "blockMedia", {width:"auto"})
 console.log("Создано:",blockMedia);
+
     var blockControls = createElement("div", genID("blockControls"), "blockControls");
 console.log("Создано:",blockControls);
 
@@ -150,11 +156,17 @@ function pow(value){return value*value}
 
 
 function Player(HTMLElement){
+  this.container = HTMLElement;
 
+  if(this.container.dataset.src){
+    this.src = this.container.dataset.src;
+  }
+  else{
+    console.error("Ошибка получения src!");
+  }
 
-
-
-
+  this.width = this.container.dataset.width || "";
+  this.height = this.container.dataset.height || "";
 
 
 
@@ -166,13 +178,14 @@ function Player(HTMLElement){
 
 
 
+
+
+
   this.init = function(){
-    /*var mediaContainers = query(selector);
-		createPlayer(mediaContainers[0]);*/
+    var mediaContainers = query(selector);
 
+    mediaContainers.forEach(function(element){new Player(element)})
 
-		var el = [1,2,3,4,5,6]
-		el.forEach(function(value){new Player()})
   };
 
 
