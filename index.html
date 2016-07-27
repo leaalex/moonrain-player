@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.23 'sort objects' ");
+console.log("v0.1.24 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -63,7 +63,7 @@ function Constructor(selector){
   function mediaObjects(objectJSON, type, property){
     var elements = [];
     objectJSON[type].forEach(function(element){
-        if(elenemt.type != "SPEAKER_CHANGED"){
+        if(element.type != "SPEAKER_CHANGED"){
             elements.push(element[property])
       }
     });
