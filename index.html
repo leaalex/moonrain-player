@@ -27,7 +27,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.27 'sort objects' ");
+console.log("v0.1.28 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -196,8 +196,12 @@ function Player(HTMLElement){
         object.filename = this.objectJSON.video[i].filename;
         //object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
-        console.log(object.html.duration);
         elementArray[object.name] = object;
+        
+        object.html.onloadedmetadata = function(){
+          object.duration = object.html.duration;
+        }
+
       }
     }
 
@@ -210,6 +214,10 @@ function Player(HTMLElement){
         object.html = createElement("video", genID("audio"), false, {width: 300}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
   
         elementArray[object.name] = object;
+
+        object.html.onloadedmetadata = function(){
+          object.duration = object.html.duration;
+        }
     }
 
 
