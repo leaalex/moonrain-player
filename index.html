@@ -16,7 +16,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.4 'new Player'");
+console.log("v0.1.4 'new Player by pow'");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -148,11 +148,11 @@ console.log("Создано:",blockHide);
 
 
 
-
-
+this.valueExemple = "это странный текст"
+function pow(value){return value*value}
 
 function Player(value){
-	console.log("экземпляр создан", value)
+	console.log("экземпляр создан", pow(value))
 }
 
 
