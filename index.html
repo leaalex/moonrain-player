@@ -168,9 +168,9 @@ function Player(HTMLElement){
 
   this.objectJSON = getObjectJSON("0.json");
   
-  this.instants = mediaObjects(this.objectJSON, "video", "instant") +  mediaObjects(this.objectJSON, "audio", "instant");
+  this.instants = mediaObjects(this.objectJSON, "video", "instant") + mediaObjects(this.objectJSON, "audio", "instant");
 
-  this.instants.sort(function(a, b) {return a-b} );
+ // this.instants.sort(function(a, b) {return a-b} );
 
 }
   
