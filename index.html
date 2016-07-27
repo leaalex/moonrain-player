@@ -16,7 +16,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.3.mc");
+console.log("v0.1.4 'CreateMediaContainer'");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -104,8 +104,11 @@ function Constructor(selector){
 
 this.meta = {}
 
-  function createPlayer(mediaContainer){
-    var src = mediaContainer.dataset.src;
+  function createPlayer(value){
+		var mediaContainer = {};
+		mediaContainer.html = value;
+
+    var src = mediaContainer.html.dataset.src;
     var objectJSON = getObjectJSON("0.json");
 
     var videoNames = mediaObjects(objectJSON, "video", "filename");
@@ -125,9 +128,9 @@ console.log("Создано:",blockHide);
 			video.addEventListener("loadedmetadata", function(){console.log(this, this.duration)})
 		});
 
-		mediaContainer.appendChild(blockMedia);
-		mediaContainer.appendChild(blockControls);
-		mediaContainer.appendChild(blockHide);
+		mediaContainer.html.appendChild(blockMedia);
+		mediaContainer.html.appendChild(blockControls);
+		mediaContainer.html.appendChild(blockHide);
 
 		for(var i = 0; i<time.length; i++){
 			if(i!=time.length){
@@ -154,8 +157,8 @@ console.log("Создано:",blockHide);
 
 
   this.init = function(){
-    var mediaContainer = query(selector);
-		createPlayer(mediaContainer[0]);
+    var mediaContainers = query(selector);
+		createPlayer(mediaContainers[0]);
 
   };
 
