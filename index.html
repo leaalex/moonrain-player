@@ -120,8 +120,8 @@ console.log("Создано:",blockControls);
 		var blockHide = createElement("div", genID("blockHide"),"blockHide");
 console.log("Создано:",blockHide);
 		videoNames.forEach(function(name){
-			var video = createElement("video", genID("video"),false,{width:300},{src:src + name, preload:"metadata"}
-			blockHide.appendChild(video))
+			var video = createElement("video", genID("video"),false,{width:300},{src:src + name, preload:"metadata"})
+			blockHide.appendChild(video)
 			video.addEventListener("loadedmetadata", function(){console.log(this, this.duration)})
 		});
 
