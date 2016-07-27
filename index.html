@@ -199,8 +199,9 @@ function Player(HTMLElement){
         elementArray[object.name] = object;
 
 				object.html.addEventListener("loadedmetadata", function(){
-          object.duration = "this.duration";
-          console.log( object,this.duration);
+					return function(){
+	          object.duration = this.duration;
+					}
         });
 
       }
