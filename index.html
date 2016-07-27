@@ -63,7 +63,9 @@ function Constructor(selector){
   function mediaObjects(objectJSON, type, property){
     var elements = [];
     objectJSON[type].forEach(function(element){
-        elements.push(element[property])
+        if(elenemt.type != "SPEAKER_CHANGED"){
+            elements.push(element[property])
+      }
     });
     return elements;
   };
