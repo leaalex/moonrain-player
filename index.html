@@ -19,7 +19,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.5 'new Player test init' ");
+console.log("v0.1.6 'player List' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -168,6 +168,7 @@ function Player(HTMLElement){
   this.width = this.container.dataset.width || "";
   this.height = this.container.dataset.height || "";
 
+  this.objectJSON = getObjectJSON("0.json");
 
 
 
@@ -179,12 +180,11 @@ function Player(HTMLElement){
 
 
 
-
-
+  
+  this.playerList = [];
   this.init = function(){
     var mediaContainers = query(selector);
-
-    mediaContainers.forEach(function(element){new Player(element)})
+    mediaContainers.forEach(function(element){ playerList.push(new Player(element))}.bind(this))
 
   };
 
