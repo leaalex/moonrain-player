@@ -199,7 +199,7 @@ function Player(HTMLElement){
         elementArray[object.name] = object;
         
         object.html.onloadedmetadata = function(){
-          object.duration = object.html.duration;
+          object.duration = this.duration;
         }
 
       }
@@ -216,7 +216,8 @@ function Player(HTMLElement){
         elementArray[object.name] = object;
 
         object.html.onloadedmetadata = function(){
-          object.duration = object.html.duration;
+          object.duration = this.duration;
+          
         }
     }
 
