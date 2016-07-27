@@ -198,8 +198,10 @@ function Player(HTMLElement){
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
 
+				console.log(object, this);
 				object.html.addEventListener("loadedmetadata", function(object){
 						object.duration = this.duration;
+						console.log(object, this);
 				}(object));
 
       }
@@ -214,9 +216,11 @@ function Player(HTMLElement){
         object.html = createElement("video", genID("audio"), false, {width: 300}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
 
         elementArray[object.name] = object;
-
+				
+				console.log(object, this);
 				object.html.addEventListener("loadedmetadata", function(object){
 						object.duration = this.duration;
+						console.log(object, this);
 				}(object));
     }
 
