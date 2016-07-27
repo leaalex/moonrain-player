@@ -4,10 +4,10 @@
 	</head>
 <body>
 
-<!--
+
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/">
 </div>
--->
+
 <div class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/">
 </div>
 
@@ -106,7 +106,7 @@ this.meta = {}
 
   function createPlayer(mediaContainer){
     var src = mediaContainer.dataset.src;
-    var objectJSON = getObjectJSON("1.json");
+    var objectJSON = getObjectJSON("0.json");
 
     var videoNames = mediaObjects(objectJSON, "video", "filename");
 console.log("Список имен видео получен:", videoNames);
