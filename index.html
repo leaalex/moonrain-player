@@ -17,7 +17,7 @@
 
 
 <script type="text/javascript">
-console.log("v0.1.22 'sort objects' ");
+console.log("v0.1.23 'sort objects' ");
 function Constructor(selector){
 	function status(messege, elenemt){
 		console.log(">> status:" + messege, element);
@@ -182,7 +182,7 @@ function Player(HTMLElement){
         object.name = this.objectJSON.video[i].instant;
         object.type = 'video';
         object.filename = this.objectJSON.video[i].filename;
-        object.html = "<video><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
+        object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
         elementArray[object.name] = object;
       }
     }
@@ -192,7 +192,7 @@ function Player(HTMLElement){
         object.name = this.objectJSON.audio[i].instant;
         object.type = 'audio';
         object.filename = this.objectJSON.audio[i].filename;
-        object.html = "<video><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
+        object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
         elementArray[object.name] = object;
     }
 
