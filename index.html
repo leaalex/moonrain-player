@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.32 'testing addEventListener' ");
+console.log("v0.1.33 'testing addEventListener' ");
 
 
 
@@ -205,10 +205,11 @@ function Player(HTMLElement){
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
 				(function(element){
+					return function(){
 				element.addEventListener("loadedmetadata", function(){
 						object.duration = this.duration;
 						console.log(object, this);
-				});
+				});}
 			}(object.html))
 
       }
