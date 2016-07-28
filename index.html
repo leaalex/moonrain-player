@@ -208,7 +208,7 @@ function Player(HTMLElement){
 
 
 			(function(element){
-					return (function(){
+					(function(){
 				element.html.addEventListener("loadedmetadata", function(){
 						element.duration = this.duration;
 						console.log(element, this);
@@ -229,7 +229,7 @@ function Player(HTMLElement){
         elementArray[object.name] = object;
 
 				(function(element){
-						return (function(){
+						(function(){
 					element.html.addEventListener("loadedmetadata", function(){
 							element.duration = this.duration;
 							console.log(element, this);
