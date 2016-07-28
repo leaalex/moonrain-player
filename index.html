@@ -207,14 +207,14 @@ function Player(HTMLElement){
 
 
 
-			var testFunction = (function(element){
+			(function(element){
 					return function(){
 				element.html.addEventListener("loadedmetadata", function(){
 						element.duration = this.duration;
 						console.log(element, this);
 				});}
 			})(object);
-			testFunction()
+
 
       }
     }
@@ -227,6 +227,14 @@ function Player(HTMLElement){
        // object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
         object.html = createElement("video", genID("audio"), false, {width: 300}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
+
+				(function(element){
+						return function(){
+					element.html.addEventListener("loadedmetadata", function(){
+							element.duration = this.duration;
+							console.log(element, this);
+					});}
+				})(object);
     }
 
 
