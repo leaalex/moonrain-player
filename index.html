@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.44 'testing addEventListener' ");
+console.log("v0.1.45 'testing addEventListener' ");
 
 
 
@@ -260,9 +260,13 @@ function Player(HTMLElement){
 
   console.log("last duration: ", this.mediaList[this.instants[this.instants.length-1]]);
 
-  console.log("last duration: ", this.mediaList[this.instants[this.instants.length-1]].duration);
+  this.lastElementDuration = this.mediaList[this.instants[this.instants.length-1]].duration;
 
-  console.log( (this.instants[this.instants.length-1] - this.instants[0])/1000 );
+  console.log("last duration: ", this.lastElementDuration);
+
+
+
+  console.log( (this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
 
   //this.
 
