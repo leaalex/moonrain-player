@@ -224,7 +224,7 @@ function Player(HTMLElement){
         var object = {};
         object.name = this.objectJSON.audio[i].instant;
         object.type = 'audio';
-        object.duration = 0;
+        //object.duration = 0;
         object.filename = this.objectJSON.audio[i].filename;
        // object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.audio[i].filename + "'></source></video>";
         object.html = createElement("video", genID("audio"), false, {width: 300}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
@@ -243,13 +243,19 @@ function Player(HTMLElement){
 
 
     console.log(elementArray);
+
+
     return elementArray;
   }.bind(this);
 
 
-  this.duration = (function(){});
+ // this.duration = (function(){});
 
   this.mediaList = this.sortObjects();
+
+  console.log(this.mediaList);
+
+  //console.log();
   this.instants.forEach(function(element){ this.container.appendChild(this.mediaList[element].html) }.bind(this))
 }
 
