@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.40 'testing addEventListener' ");
+console.log("v0.1.41 'testing addEventListener' ");
 
 
 
@@ -258,8 +258,9 @@ function Player(HTMLElement){
   //console.log();
   this.instants.forEach(function(element){ this.container.appendChild(this.mediaList[element].html) }.bind(this))
 
+  console.log("last duration: " + this.mediaList[this.instants[this.instants.length-1]].duration);
 
-  console.log( (this.instants[this.instants.length-1] - this.instants[0])/1000 + 0  );
+  console.log( (this.instants[this.instants.length-1] - this.instants[0])/1000 + this.mediaList[this.instants[this.instants.length-1]].duration  );
 
   //this.
 
