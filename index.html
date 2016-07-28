@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.33 'testing addEventListener' ");
+console.log("v0.1.33-1 'testing addEventListener' ");
 
 
 
@@ -204,13 +204,14 @@ function Player(HTMLElement){
         //object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
-				(function(element){
+				var testFunction = (function(element){
 					return function(){
 				element.addEventListener("loadedmetadata", function(){
 						object.duration = this.duration;
 						console.log(object, this);
 				});}
-			}(object.html))
+			}(object.html));
+			testFunction()
 
       }
     }
