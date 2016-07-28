@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.47 'testing addEventListener' ");
+console.log("v0.1.48 'testing addEventListener' ");
 
 
 
@@ -262,11 +262,11 @@ function Player(HTMLElement){
 
   this.lastElementDuration = this.mediaList[this.instants[this.instants.length-1]].duration;
 
-
   var testFunction = (function(element){
       return function(){
     element.html.addEventListener("loadedmetadata", function(){
         element.duration = this.duration;
+        this.lastElementDuration= this.duration;
         console.log("print");
         console.log(element, this);
     });}
