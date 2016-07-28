@@ -18,7 +18,7 @@
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/" style="background: aliceblue;margin-bottom: 100px;">
 </div>
 
-<<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
+<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
 </div>
 
 
@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.42 'testing addEventListener' ");
+console.log("v0.1.43 'testing addEventListener' ");
 
 
 
@@ -258,7 +258,7 @@ function Player(HTMLElement){
   //console.log();
   this.instants.forEach(function(element){ this.container.appendChild(this.mediaList[element].html) }.bind(this))
 
-  console.log("last duration: " + this.mediaList[this.instants[this.instants.length-1]]);
+  console.log("last duration: ", this.mediaList[this.instants[this.instants.length-1]]);
 
   console.log( (this.instants[this.instants.length-1] - this.instants[0])/1000 );
 
