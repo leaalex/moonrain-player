@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.49 'testing addEventListener' ");
+console.log("v0.1.50 'testing addEventListener' ");
 
 
 
@@ -212,8 +212,9 @@ function Player(HTMLElement){
 					element.html.addEventListener("loadedmetadata", function(){
 							element.duration = this.duration;
 						//	console.log(element, this);
-            if(object.name == value){
-                console.log("LOOOL:",object.name,value);
+            console.log("LOOOL:",element.name,value);
+            if(element.name == value){
+                console.log("ok");
                 d=this.duration;
             }
 
