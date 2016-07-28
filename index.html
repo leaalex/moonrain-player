@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.46 'testing addEventListener' ");
+console.log("v0.1.47 'testing addEventListener' ");
 
 
 
@@ -262,14 +262,18 @@ function Player(HTMLElement){
 
   this.lastElementDuration = this.mediaList[this.instants[this.instants.length-1]].duration;
 
-  var varWatch = this.mediaList[this.instants[this.instants.length-1]].duration;
 
-  this.defineProperty(this, 'varWatch', {
-    set: function (v) {
-      myVar = v;  
-      this.lastElementDuration = varWatch;
-  }
-  });
+  var testFunction = (function(element){
+      return function(){
+    element.html.addEventListener("loadedmetadata", function(){
+        element.duration = this.duration;
+        console.log("print");
+        console.log(element, this);
+    });}
+  })(this.mediaList[this.instants[this.instants.length-1]]);
+  testFunction()
+
+
 
   console.log("last duration time: ", this.lastElementDuration);
 
