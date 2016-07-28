@@ -204,12 +204,12 @@ function Player(HTMLElement){
         //object.html = "<video name=" + object.name + " preload='metadata'><source src='" + this.src + this.objectJSON.video[i].filename + "'></source></video>";
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
-				object.duration = "0";
-
-				object.html.addEventListener("loadedmetadata", function(){
+				(function(element){
+				element.addEventListener("loadedmetadata", function(){
 						object.duration = this.duration;
 						console.log(object, this);
 				});
+			}(object.html))
 
       }
     }
