@@ -191,7 +191,7 @@ function Player(HTMLElement){
 
   //this.instants.forEach(function(element){  })
 
-  
+  var d =0;
 
   this.sortObjects = function(){
     var elementArray = {};
@@ -207,13 +207,17 @@ function Player(HTMLElement){
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
 
-				var testFunction = (function(element){
+				var testFunction = (function(element, value){
 						return function(){
 					element.html.addEventListener("loadedmetadata", function(){
 							element.duration = this.duration;
 						//	console.log(element, this);
+            if(object.name == value){
+                d=this.duration;
+            }
+
 					});}
-				})(object);
+				})(object, this.instants[this.instants.length-1]);
 				testFunction()
       
       }
@@ -236,6 +240,10 @@ function Player(HTMLElement){
 					element.html.addEventListener("loadedmetadata", function(){
 							element.duration = this.duration;
 						//	console.log(element, this);
+            if(object.name == this.instants[this.instants.length-1]){
+
+            }
+
 					});}
 				})(object);
 				testFunction()
@@ -255,23 +263,13 @@ function Player(HTMLElement){
 
   console.log(this.mediaList);
 
+
+
   //console.log();
   this.instants.forEach(function(element){ this.container.appendChild(this.mediaList[element].html) }.bind(this))
 
-  console.log("last duration object: ", this.mediaList[this.instants[this.instants.length-1]]);
 
-  this.lastElementDuration = this.mediaList[this.instants[this.instants.length-1]].duration;
-
-  var testFunction = (function(element){
-      return function(){
-    element.html.addEventListener("loadedmetadata", function(){
-        element.duration = this.duration;
-        this.lastElementDuration= this.duration;
-        console.log("print");
-        console.log(element, this);
-    });}
-  })(this.mediaList[this.instants[this.instants.length-1]]);
-  testFunction()
+  this.lastElementDuration = d;
 
 
 
