@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
 
-console.log("v0.1.51 'testing addEventListener' ");
+console.log("v0.1.50 'testing addEventListener' ");
 
 
 
@@ -212,15 +212,15 @@ function Player(HTMLElement){
 					element.html.addEventListener("loadedmetadata", function(){
             
 					  element.duration = this.duration;
-
-					});
-
-            element.duration = this.duration;
             console.log("LOOOL:",element.name,value);
             if(element.name == value){
                 console.log("ok");
                 d = this.duration;
             }
+
+					});
+
+
         }
 				})(object, this.instants[this.instants.length-1]);
 				testFunction()
