@@ -191,7 +191,7 @@ function Player(HTMLElement){
 
   //this.instants.forEach(function(element){  })
 
-  var d = 0;
+this.d = 0;
 
   this.sortObjects = function(){
     var elementArray = {};
@@ -217,7 +217,7 @@ function Player(HTMLElement){
            
             if(element.name == value){
                 console.log("ok");
-                d = this.duration;
+                this.d = this.duration;
             }
 
 					});
@@ -273,7 +273,7 @@ function Player(HTMLElement){
   this.instants.forEach(function(element){ this.container.appendChild(this.mediaList[element].html) }.bind(this))
 
 
-  this.lastElementDuration = d;
+  this.lastElementDuration = this.d;
 
 
 
