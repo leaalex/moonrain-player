@@ -215,10 +215,10 @@ function Player(HTMLElement){
   }.bind(this);
 
 
-  	function xxx(){
-  	console.log(this);
-  	//console.log("Длина последнего элемента: ", this.lastElementDuration);
-	//console.log("общая длина: ",(this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
+  	function xxx(a,b){
+	    console.log(a);
+	  	//console.log("Длина последнего элемента: ", this.lastElementDuration);
+		//console.log("общая длина: ",(this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
 	}
 
 
@@ -232,7 +232,7 @@ function Player(HTMLElement){
 			 if(this.instants[this.instants.length - 1] == element){
 				// console.log(this.mediaList[element]);
 				 this.lastElementDuration = this.mediaList[element].duration;
-				 xxx.bind(this);
+				 xxx(this.instants[this.instants.length-1], this.instants[0]);
 				 console.log("это зыс:", this);
 			 };
 		 }.bind(this))
