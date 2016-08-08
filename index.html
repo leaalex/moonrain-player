@@ -200,8 +200,8 @@ this.d = 0;
 
     for(var i = 0; i < this.objectJSON.video.length; i++){
 
-    console.log("this.objectJSON.video.length", this.objectJSON.video.length);
-	console.log("this.instants.length", this.instants.length);
+   // console.log("this.objectJSON.video.length", this.objectJSON.video.length);
+   // console.log("this.instants.length", this.instants.length);
 
         if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
         var object = {};
@@ -219,7 +219,7 @@ this.d = 0;
 	            		element.duration = this.duration;
 	           
 			            if(element.name == value){
-			                //console.log("ok");
+			                console.log("ok");
 			                this.d = this.duration;
 			            }
 					});
