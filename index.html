@@ -196,7 +196,13 @@ this.d = 0;
   this.sortObjects = function(){
     var elementArray = {};
 
+
+
     for(var i = 0; i < this.objectJSON.video.length; i++){
+
+    console.log("this.objectJSON.video.length", this.objectJSON.video.length);
+	console.log("this.instants.length", this.instants.length);
+
         if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
         var object = {};
         object.name = this.objectJSON.video[i].instant;
@@ -208,22 +214,17 @@ this.d = 0;
         elementArray[object.name] = object;
 
 				var testFunction = (function(element, value){
-						return function(){
-					element.html.addEventListener("loadedmetadata", function(){
-            
-					  element.duration = this.duration;
-           
-           // console.log("LOOOL:",element.name,value);
-           
-            if(element.name == value){
-                //console.log("ok");
-                this.d = this.duration;
-            }
-
+					return function(){
+						element.html.addEventListener("loadedmetadata", function(){
+	            		element.duration = this.duration;
+	           
+			            if(element.name == value){
+			                //console.log("ok");
+			                this.d = this.duration;
+			            }
 					});
+		        	}	
 
-
-        }
 				})(object, this.instants[this.instants.length-1]);
 				testFunction()
       
