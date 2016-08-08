@@ -215,8 +215,15 @@ function Player(HTMLElement){
   }.bind(this);
 
 
-  	function xxx(a,b){
-	    console.log((a - b)/1000);
+  	function xxx(a, b, c){
+  		console.log("time 0: ", a)
+	    console.log("time last: ", b)
+	    
+	    console.log("time last: ", (a-b));
+	    
+
+  		console.log("Last duration: ", c)
+	    console.log( (a - b)/1000 + c);
 	  	//console.log("Длина последнего элемента: ", this.lastElementDuration);
 		//console.log("общая длина: ",(this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
 	}
@@ -232,7 +239,7 @@ function Player(HTMLElement){
 			 if(this.instants[this.instants.length - 1] == element){
 				// console.log(this.mediaList[element]);
 				 this.lastElementDuration = this.mediaList[element].duration;
-				 xxx(this.instants[this.instants.length-1], this.instants[0]);
+				 xxx(this.instants[this.instants.length-1], this.instants[0], this.lastElementDuration);
 				 console.log("это зыс:", this);
 			 };
 		 }.bind(this))
