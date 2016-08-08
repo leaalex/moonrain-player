@@ -185,8 +185,19 @@ function Player(HTMLElement){
 	this.sortObjects = function(){
     var elementArray = {};
 
+<<<<<<< HEAD
 		for(var i = 0; i < this.objectJSON.video.length; i++){
 			if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
+=======
+
+
+    for(var i = 0; i < this.objectJSON.video.length; i++){
+
+   // console.log("this.objectJSON.video.length", this.objectJSON.video.length);
+   // console.log("this.instants.length", this.instants.length);
+
+        if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
+>>>>>>> master
         var object = {};
         object.name = this.objectJSON.video[i].instant;
         object.type = 'video';
@@ -194,7 +205,27 @@ function Player(HTMLElement){
         object.filename = this.objectJSON.video[i].filename;
         object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
         elementArray[object.name] = object;
+<<<<<<< HEAD
 			}
+=======
+
+				var testFunction = (function(element, value){
+					return function(){
+						element.html.addEventListener("loadedmetadata", function(){
+	            		element.duration = this.duration;
+	           
+			            if(element.name == value){
+			                console.log("ok");
+			                this.d = this.duration;
+			            }
+					});
+		        	}	
+
+				})(object, this.instants[this.instants.length-1]);
+				testFunction()
+      
+      }
+>>>>>>> master
     }
     for(var i = 0; i < this.objectJSON.audio.length; i++){
 			if(this.objectJSON.audio[i].type != "SPEAKER_CHANGED"){
