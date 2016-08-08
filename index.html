@@ -226,7 +226,7 @@ function Player(HTMLElement){
 			 if(this.instants[this.instants.length-1] == element){
 				 console.log(this.mediaList[element]);
 				 this.lastElementDuration = this.mediaList[element].duration;
-				 xxx();
+				 xxx().bind(this);
 			 };
 		 }.bind(this))
 
