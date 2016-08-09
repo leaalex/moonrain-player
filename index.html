@@ -1,27 +1,26 @@
 <html>
 	<head>
-  		<meta charset="utf-8">
+		<meta charset="utf-8">
 	</head>
-  <style>
-
-  video{
-    border: 1px solid;
-    height: 250;
-  }
-  </style>
+	<style>
+		video{
+			border: 1px solid;
+			height: 100;
+		}
+	</style>
+	<script src="script.js" charset="utf-8"></script>
 <body>
 
 
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/" style="background: aliceblue;margin-bottom: 100px;">
 </div>
-<!--<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
-</div>-->
+<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
+</div>
 </body>
 </html>
 
 
 <script type="text/javascript">
-
 
 console.log("v0.1.53 'length' ");
 
@@ -30,221 +29,106 @@ console.log("v0.1.53 'length' ");
 function Constructor(selector){
 
 	// Седектор по которому происходит поиск элементов для подключения плеера
-  var selector = selector || ".media-container";
-	// Функция получает селектор возвращает массив обектов. В массие может быть один элемент
-  function query(selector){
-    var array = [];
-    var elements = document.querySelectorAll(selector);
-    for (var i = 0; i < elements.length; i++){
-      array.push(elements[i]);
-    };
-    return array;
-  }
-	// Функция гегенрации ID
-  function genID(value){
-    var value = value+"_" || "id"
-      return value + Math.random().toString(16).substr(2, 8).toUpperCase();
-  };
-	// Функция получение JSON'а по URL и преобрзование его в объект
-  function getObjectJSON(urlJSON){
-    var objectJSON = {};
-    var request = new XMLHttpRequest();
-    request.open('GET', urlJSON, false);
-    request.onreadystatechange = function(e) {
-        if (this.readyState == 4) {
-            if (this.status == 200) {
-              console.log("Загрузка успешно завершена: " , urlJSON);
-              objectJSON = JSON.parse(this.responseText);
-            }
-            else {
-              console.log("Ошибка загрузки: " + urlJSON)
-            }
-        }
-    }
-    request.send(null);
-    return objectJSON;
-  };
-
-	// Функция получения свойства каждого из элементов в нутри обекта
-  function mediaObjects(objectJSON, type, property){
-    var elements = [];
-    objectJSON[type].forEach(function(element){
-        if(element.type != "SPEAKER_CHANGED"){
-            elements.push(element[property])
-      }
-    });
-    return elements;
-  };
-// Функция создания видео/аудео блока
-  function createMediaELement(type, name, src){
-    var element = document.createElement(type);
-		element.controls = false;
-		element.preload = "metadata";
-    var source = document.createElement("source");
-    source.src = src + name;
-		source.type = "video/webm";
-    element.appendChild(source);
-		return element;
-  };
-
-  function createElement(tagName, id, classList, attributes, properties){
-
-    var element = document.createElement(tagName);
-    if (id) {
-			element.id = id;
-		};
-    if (classList) {
-			element.classList = classList;
-		};
-    if (attributes){
-      for (attribute in attributes){
-        element.setAttribute(attribute, attributes[attribute]);
-      };
-    };
-		if (properties){
-			for (propertiy in properties){
-				element[propertiy] =  properties[propertiy];
-			}
-		}
-
-    return element;
-  };
-
-
-this.meta = {}
-
-  function createPlayer(value){
-		var mediaContainer = {};
-		mediaContainer.html = value;
-
-    var src = mediaContainer.html.dataset.src;
-    var objectJSON = getObjectJSON("0.json");
-
-    var videoNames = mediaObjects(objectJSON, "video", "filename");
-console.log("Список имен видео получен:", videoNames);
-
-    var time = mediaObjects(objectJSON, "video", "instant");
-console.log("Список имен audio получен:", time);
-
-    var blockMedia = createElement("div", genID("blockMedia"),  "blockMedia", {width:"auto"})
-console.log("Создано:",blockMedia);
-
-    var blockControls = createElement("div", genID("blockControls"), "blockControls");
-console.log("Создано:",blockControls);
-
-		var blockHide = createElement("div", genID("blockHide"),"blockHide");
-console.log("Создано:",blockHide);
-		videoNames.forEach(function(name){
-			var video = createElement("video", genID("video"),false,{width:300},{src:src + name, preload:"metadata"})
-			blockHide.appendChild(video)
-			video.addEventListener("loadedmetadata", function(){console.log(this, this.duration)})
-		});
-
-		mediaContainer.html.appendChild(blockMedia);
-		mediaContainer.html.appendChild(blockControls);
-		mediaContainer.html.appendChild(blockHide);
-
-		for(var i = 0; i<time.length; i++){
-			if(i!=time.length){
-				var duration = time[i+1] - time[i];
-				console.log(duration);
-			}
-
-		}
-
-	};
+	var selector = selector || ".media-container";
+	this.meta = {}
 
 
 
-function watch(object, event){
-	var result;
-	object.addEventListener(event, function(){})
-}
 
 
-
-function Player(HTMLElement){
-  this.container = HTMLElement;
-
-  if(this.container.dataset.src){
-    this.src = this.container.dataset.src;
-  }
-  else{
-    console.error("Ошибка получения src!");
-  }
-
-  this.width = this.container.dataset.width || "";
-  this.height = this.container.dataset.height || "";
-
-	// Получеине обекта из JSON'а
-  this.objectJSON = getObjectJSON("https://crossorigin.me/" + this.src + "metadata.json");
-
-	//Получение всех instant и сортировка их по возростанию
-  this.instants = (mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"))).sort(function(a, b) {return a-b} );
-
-	this.sortObjects = function(){
-    var elementArray = {};
-
-
-		for(var i = 0; i < this.objectJSON.video.length; i++){
-			if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
-
-        var object = {};
-        object.name = this.objectJSON.video[i].instant;
-        object.type = 'video';
-        object.duration = 0;
-        object.filename = this.objectJSON.video[i].filename;
-        object.html = createElement("video", genID("video"), false, {width: 300}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
-        elementArray[object.name] = object;
-
-			}
-
-    }
-    for(var i = 0; i < this.objectJSON.audio.length; i++){
-			if(this.objectJSON.audio[i].type != "SPEAKER_CHANGED"){
-        var object = {};
-        object.name = this.objectJSON.audio[i].instant;
-        object.type = 'audio';
-        object.duration = 0;
-        object.filename = this.objectJSON.audio[i].filename;
-        object.html = createElement("video", genID("audio"), false, {width: 300}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
-        elementArray[object.name] = object;
-			}
-    }
-    return elementArray;
-  }.bind(this);
-
-
-  	function xxx(a, b, c){
-  		console.log("time 0: ", a)
-	    console.log("time last: ", b)
-	    
-	    console.log("time last: ", (a-b));
-	    
-
-  		console.log("Last duration: ", c)
-	    console.log( (a - b)/1000 + c);
-	  	//console.log("Длина последнего элемента: ", this.lastElementDuration);
-		//console.log("общая длина: ",(this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
+	function watch(object, event){
+		var result;
+		object.addEventListener(event, function(){})
 	}
 
 
-  this.lastElementDuration = 0;
 
-  this.mediaList = this.sortObjects();
-  this.instants.forEach(function(element){
-		 this.container.appendChild(this.mediaList[element].html);
-		 this.mediaList[element].html.addEventListener("loadedmetadata",function(){
-			 this.mediaList[element].duration = this.mediaList[element].html.duration;
-			 if(this.instants[this.instants.length - 1] == element){
-				// console.log(this.mediaList[element]);
-				 this.lastElementDuration = this.mediaList[element].duration;
-				 xxx(this.instants[this.instants.length-1], this.instants[0], this.lastElementDuration);
-				 console.log("это зыс:", this);
-			 };
-		 }.bind(this))
+	function Player(HTMLElement){
+		this.container = HTMLElement;
 
-	}.bind(this))
+		this.blockMedia = createElement("div", genID("blockMedia"),  "blockMedia", {width:"auto"})
+		console.log("Создано:",this.blockMedia);
+
+		this.blockControls = createElement("div", genID("blockControls"), "blockControls");
+		console.log("Создано:",this.blockControls);
+
+		this.blockHide = createElement("div", genID("blockHide"),"blockHide");
+		console.log("Создано:",this.blockHide);
+
+		this.container.appendChild(this.blockMedia);
+		this.container.appendChild(this.blockControls);
+		this.container.appendChild(this.blockHide);
+
+		if(this.container.dataset.src){
+			this.src = this.container.dataset.src;
+		}
+		else{
+			console.error("Ошибка получения src!");
+		}
+
+		this.width = this.container.dataset.width || "";
+		this.height = this.container.dataset.height || "";
+
+		// Получеине обекта из JSON'а
+		this.objectJSON = getObjectJSON("https://crossorigin.me/" + this.src + "metadata.json");
+
+		//Получение всех instant и сортировка их по возростанию
+		this.instants = (mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"))).sort(function(a, b) {return a-b} );
+
+		this.sortObjects = function(){
+			var elementArray = {};
+			for(var i = 0; i < this.objectJSON.video.length; i++){
+				if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
+					var object = {};
+					object.name = this.objectJSON.video[i].instant;
+					object.type = 'video';
+					object.duration = 0;
+					object.filename = this.objectJSON.video[i].filename;
+					object.html = createElement("video", genID("video"), false, {width: 100}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
+					elementArray[object.name] = object;
+				}
+			}
+			for(var i = 0; i < this.objectJSON.audio.length; i++){
+				if(this.objectJSON.audio[i].type != "SPEAKER_CHANGED"){
+					var object = {};
+					object.name = this.objectJSON.audio[i].instant;
+					object.type = 'audio';
+					object.duration = 0;
+					object.filename = this.objectJSON.audio[i].filename;
+					object.html = createElement("video", genID("audio"), false, {width: 100}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
+					elementArray[object.name] = object;
+				}
+			}
+			return elementArray;
+		}.bind(this);
+
+
+		function xxx(a, b, c){
+			console.log("time 0: ", a)
+			console.log("time last: ", b)
+			console.log("time last: ", (a-b));
+			console.log("Last duration: ", c)
+			console.log( (a - b)/1000 + c);
+			//console.log("Длина последнего элемента: ", this.lastElementDuration);
+			//console.log("общая длина: ",(this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
+		}
+
+		this.lastElementDuration = 0;
+
+		this.mediaList = this.sortObjects();
+		this.instants.forEach(function(element){
+			 this.blockHide.appendChild(this.mediaList[element].html);
+			 this.mediaList[element].html.addEventListener("loadedmetadata",function(){
+				 this.mediaList[element].duration = this.mediaList[element].html.duration;
+				 if(this.instants[this.instants.length - 1] == element){
+					// console.log(this.mediaList[element]);
+					 this.lastElementDuration = this.mediaList[element].duration;
+					 xxx(this.instants[this.instants.length-1], this.instants[0], this.lastElementDuration);
+					 console.log("это зыс:", this);
+				 };
+			 }.bind(this))
+
+		}.bind(this))
 
 
 }
@@ -257,7 +141,10 @@ function Player(HTMLElement){
   this.playerList = [];
   this.init = function(){
     var mediaContainers = query(selector);
-    mediaContainers.forEach(function(element){ this.playerList.push(new Player(element))}.bind(this))
+
+    mediaContainers.forEach(function(element){
+		this.playerList.push(new Player(element))
+	}.bind(this))
 
   };
 
