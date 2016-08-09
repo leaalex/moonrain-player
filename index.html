@@ -5,7 +5,15 @@
 	<style>
 		video{
 			border: 1px solid;
-			height: 100;
+			height: 170;
+		}
+		.one-track{
+			display: inline-block;
+			height: 20px;
+			/*border: 1px solid black;*/
+				}
+		.videoblock{
+			height: 400;
 		}
 	</style>
 	<script src="script.js" charset="utf-8"></script>
@@ -24,24 +32,16 @@
 
 console.log("v0.1.53 'length' ");
 
-
-
 function Constructor(selector){
 
 	// Седектор по которому происходит поиск элементов для подключения плеера
 	var selector = selector || ".media-container";
 	this.meta = {}
 
-
-
-
-
 	function watch(object, event){
 		var result;
 		object.addEventListener(event, function(){})
 	}
-
-
 
 	function Player(HTMLElement){
 		this.container = HTMLElement;
@@ -86,7 +86,7 @@ function Constructor(selector){
 					object.type = 'video';
 					object.duration = 0;
 					object.filename = this.objectJSON.video[i].filename;
-					object.html = createElement("video", genID("video"), false, {width: 100}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
+					object.html = createElement("video", genID("video"), false, {width: 200}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
 					elementArray[object.name] = object;
 				}
 			}
@@ -106,41 +106,60 @@ function Constructor(selector){
 
 
 		function xxx(a, b, c){
-			console.log("time 0: ", a)
+		/*	console.log("time 0: ", a)
 			console.log("time last: ", b)
 			console.log("time last: ", (a-b));
 			console.log("Last duration: ", c)
-			console.log( (a - b)/1000 + c);
+			console.log( (a - b)/1000 + c);*/
 			//console.log("Длина последнего элемента: ", this.lastElementDuration);
 			//console.log("общая длина: ",(this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
 		}
 
 		this.lastElementDuration = 0;
-		var div =[];
+		var div = {};
+    var fullDuration = 0;
 		this.mediaList = this.sortObjects();
+		var video = createElement("video", genID("videoblock"), "videoblock", {"controls":""});
+		this.blockMedia.appendChild(video);
+
 		this.instants.forEach(function(element){
-			div[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), this.mediaList[element].name);
+			div[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
 			this.timeline.appendChild(div[this.mediaList[element].name]);
 			this.blockHide.appendChild(this.mediaList[element].html);
 			this.mediaList[element].html.addEventListener("loadedmetadata",function(){
 				this.mediaList[element].duration = this.mediaList[element].html.duration;
-				div[this.mediaList[element].name].innerHTML = this.mediaList[element].name;
-				if(this.instants[this.instants.length - 1] == element){
+      //  div[this.mediaList[element].name].innerHTML = this.mediaList[element].name;
+
+				fullDuration = fullDuration + this.mediaList[element].duration;
+				for(var p in div) {
+						var dur = this.mediaList[p].duration;
+						if(dur != 0){
+							var percent = (dur*100/fullDuration);
+							div[p].style.width = percent + '%';
+						}
+						/*else{
+							div[p].innerHTML = "Пустое!"
+						}*/
+				}
+				div[this.mediaList[element].name].style.background= "#"+((1<<24)*Math.random()|0).toString(16);
+
+				var link = this.src + this.mediaList[element].filename;
+				div[this.mediaList[element].name].addEventListener("click", function(){
+					video.src = link;
+				});
+
+				/*if(this.instants[this.instants.length - 1] == element){
 					this.lastElementDuration = this.mediaList[element].duration;
 					xxx(this.instants[this.instants.length-1], this.instants[0], this.lastElementDuration);
 					console.log("это зыс:", this);
-				 };
+				};*/
+
 			 }.bind(this))
 
 		}.bind(this))
 
 
 }
-
-
-
-
-
 
   this.playerList = [];
   this.init = function(){
