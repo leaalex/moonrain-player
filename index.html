@@ -42,6 +42,7 @@ function Constructor(selector){
 	}
 
 
+
 	function Player(HTMLElement){
 		this.container = HTMLElement;
 
@@ -49,6 +50,8 @@ function Constructor(selector){
 		console.log("Создано:",this.blockMedia);
 
 		this.blockControls = createElement("div", genID("blockControls"), "blockControls");
+		this.timeline = createElement("div", genID("timeline"), "timeline");
+		this.blockControls.appendChild(this.timeline);
 		console.log("Создано:",this.blockControls);
 
 		this.blockHide = createElement("div", genID("blockHide"),"blockHide");
@@ -113,17 +116,19 @@ function Constructor(selector){
 		}
 
 		this.lastElementDuration = 0;
-
+		var div =[];
 		this.mediaList = this.sortObjects();
 		this.instants.forEach(function(element){
-			 this.blockHide.appendChild(this.mediaList[element].html);
-			 this.mediaList[element].html.addEventListener("loadedmetadata",function(){
-				 this.mediaList[element].duration = this.mediaList[element].html.duration;
-				 if(this.instants[this.instants.length - 1] == element){
-					// console.log(this.mediaList[element]);
-					 this.lastElementDuration = this.mediaList[element].duration;
-					 xxx(this.instants[this.instants.length-1], this.instants[0], this.lastElementDuration);
-					 console.log("это зыс:", this);
+			div[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), this.mediaList[element].name);
+			this.timeline.appendChild(div[this.mediaList[element].name]);
+			this.blockHide.appendChild(this.mediaList[element].html);
+			this.mediaList[element].html.addEventListener("loadedmetadata",function(){
+				this.mediaList[element].duration = this.mediaList[element].html.duration;
+				div[this.mediaList[element].name].innerHTML = this.mediaList[element].name;
+				if(this.instants[this.instants.length - 1] == element){
+					this.lastElementDuration = this.mediaList[element].duration;
+					xxx(this.instants[this.instants.length-1], this.instants[0], this.lastElementDuration);
+					console.log("это зыс:", this);
 				 };
 			 }.bind(this))
 
