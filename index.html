@@ -119,7 +119,9 @@ function Constructor(selector){
 		var div = {};
     var fullDuration = 0;
 		this.mediaList = this.sortObjects();
+
 		var video = createElement("video", genID("videoblock"), "videoblock", {"controls":""});
+		video.src = this.src + this.mediaList[this.instants[0]].filename;
 		this.blockMedia.appendChild(video);
 
 		this.instants.forEach(function(element){
