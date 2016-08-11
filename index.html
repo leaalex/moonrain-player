@@ -124,6 +124,10 @@ function Constructor(selector){
 		video.src = this.src + this.mediaList[this.instants[0]].filename;
 		this.blockMedia.appendChild(video);
 
+		var testButton = createElement("button", "testButton", "testButton");
+		testButton.innerHTML = "КНОПКА";
+		this.blockMedia.appendChild(testButton);
+
 		this.instants.forEach(function(element){
 			div[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
 			this.timeline.appendChild(div[this.mediaList[element].name]);
@@ -136,29 +140,43 @@ function Constructor(selector){
 				for(var p in div) {
 						var dur = this.mediaList[p].duration;
 						if(dur != 0){
-							var percent = (dur*100/fullDuration);
-							div[p].style.width = percent + '%';
+							div[p].style.width = (dur * 100 / fullDuration) + '%';
 						}
-						/*else{
-							div[p].innerHTML = "Пустое!"
-						}*/
 				}
-				div[this.mediaList[element].name].style.background= "#"+((1<<24)*Math.random()|0).toString(16);
 
+				div[this.mediaList[element].name].style.background= "#"+((1<<24)*Math.random()|0).toString(16);
 				var link = this.src + this.mediaList[element].filename;
+
+				var nextVideo = 0;
+				for(var i = 0; i < this.instants.length-1; i++){
+						if(this.instants[i] == element){
+							nextVideo = this.mediaList[this.instants[i+1]];
+						}
+				}
+
 				div[this.mediaList[element].name].addEventListener("click", function(){
 					video.src = link;
+					//console.log(nextVideo);
+				});
+
+				var testVar = this.mediaList[element];
+				testButton.addEventListener("click", function(){
+					console.log(testVar);
+				});
+
+				video.addEventListener('ended', function(){
+					//video.src = nextVideo;
 				});
 
 
-				console.log();
-				/*if(this.instants[this.instants.length - 1] != element){
-					var nextLink = this.instants[this.mediaList[element]];
-					video.addEventListener('ended',function(){
-						console.log("end");
-						video.src = link;
-					});
-				};*/
+
+				/*for(var i = 0; i < this.instants.length-1; i++){
+					if (this.instants[i] == element){
+					video.addEventListener('ended', function(){
+						video.src = pos.filename;
+				});
+				}
+			}*/
 
 
 				/*if(this.instants[this.instants.length - 1] == element){
