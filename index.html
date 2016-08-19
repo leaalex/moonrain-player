@@ -22,8 +22,8 @@
 
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/" style="background: aliceblue;margin-bottom: 100px;">
 </div>
-<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
-</div>
+<!--<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
+</div> -->
 </body>
 </html>
 
@@ -105,35 +105,58 @@ function Constructor(selector){
 		}.bind(this);
 
 
-		function xxx(a, b, c){
-		/*	console.log("time 0: ", a)
-			console.log("time last: ", b)
-			console.log("time last: ", (a-b));
-			console.log("Last duration: ", c)
-			console.log( (a - b)/1000 + c);*/
-			//console.log("Длина последнего элемента: ", this.lastElementDuration);
-			//console.log("общая длина: ",(this.instants[this.instants.length-1] - this.instants[0])/1000 + this.lastElementDuration);
-		}
-
 		this.lastElementDuration = 0;
 		var div = {};
-    var fullDuration = 0;
+    	var fullDuration = 0;
+
+
+
 		this.mediaList = this.sortObjects();
 
 		var video = createElement("video", genID("videoblock"), "videoblock", {"controls":""});
 		video.src = this.src + this.mediaList[this.instants[0]].filename;
 		this.blockMedia.appendChild(video);
 
-		var testButton = createElement("button", "testButton", "testButton");
-		testButton.innerHTML = "КНОПКА";
-		this.blockMedia.appendChild(testButton);
+		this.currentMedia = this.mediaList[this.instants[0]];
+		console.log("first current :" , this.currentMedia);
+
+		this.playpause = createElement("button", genID("playpause"), "playpause-buton");
+		this.playpause.innerHTML = "Play/Pause";
+		this.blockControls.appendChild(this.playpause);
+		this.playpause.addEventListener("click", function(){
+			(video.paused) ? video.play() : video.pause();
+		});
+
+		
+
+		this.next = createElement("button", genID(), "next-media-buton");
+		this.next.innerHTML = "Next";
+		this.blockControls.appendChild(this.next);
+		this.prev = createElement("button", genID(), "previous-media-buton");
+		this.prev.innerHTML = "Previous";
+		this.blockControls.appendChild(this.prev);
+
+
+
+		this.next.addEventListener("click", function(){
+			for(var i = 0; i < this.instants.length; i++){
+				if(this.instants[i] == this.currentMedia.name){
+					console.log(this.mediaList[this.instants[i]]);
+					/*video.src = this.src + this.mediaList[this.instants[i+1]].filename;
+					this.currentMedia = this.mediaList[this.instants[i+1]];*/
+				}
+
+			}
+		}.bind(this));
 
 
 		this.instants.forEach(function(element){
+
 			div[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
 			this.timeline.appendChild(div[this.mediaList[element].name]);
+
 			this.blockHide.appendChild(this.mediaList[element].html);
-			this.mediaList[element].html.addEventListener("loadedmetadata",function(){
+			this.mediaList[element].html.addEventListener("loadedmetadata", function(){
 				this.mediaList[element].duration = this.mediaList[element].html.duration;
       //  div[this.mediaList[element].name].innerHTML = this.mediaList[element].name;
 				fullDuration = fullDuration + this.mediaList[element].duration;
@@ -147,34 +170,22 @@ function Constructor(selector){
 				div[this.mediaList[element].name].style.background= "#"+((1<<24)*Math.random()|0).toString(16);
 				var link = this.src + this.mediaList[element].filename;
 
-				var nextVideo = 0;
-				var currentVideo = 0;
 
-
-
-				for(var i = 0; i < this.instants.length; i++){
-						if(this.instants[i] == this.mediaList[element].name){
-							nextVideo = this.mediaList[this.instants[i+1]];
-							currentVideo = this.mediaList[this.instants[i]];
-							console.log("ok!");
-							testButton.addEventListener("click", function(){
-
-							});
-						}
-				}
-
-
+				var temp_var = this.mediaList[element];
 				div[this.mediaList[element].name].addEventListener("click", function(){
 					video.src = link;
+					this.currentMedia = temp_var;
+					console.log("change current :", this.currentMedia);
 				});
 
-				video.addEventListener('ended', function(){
-					//video.src = nextVideo;
-				});
 
 			 }.bind(this))
 
+
 		}.bind(this))
+
+
+
 
 
 }
