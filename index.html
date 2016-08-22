@@ -85,8 +85,8 @@ function Constructor(selector){
 		console.log("Создано:",this.blockMedia);
 
 		this.blockControls = createElement("div", genID("blockControls"), "blockControls");
-		
-		this.timeBlock = createElement("div", genID("timeblock"), "time-block");
+
+		this.timeBlock = createElement("div", genID("timeBlock"), "timeBlock");
 		this.blockControls.appendChild(this.timeBlock);
 
 		this.timelineVideo = createElement("div", genID("timeline"), "timeline");
@@ -95,10 +95,7 @@ function Constructor(selector){
 		this.timelineAudio = createElement("div", genID("timeline"), "timeline");
 		this.blockControls.appendChild(this.timelineAudio);
 
-
-
-
-		console.log("Создано:",this.blockControls);
+		console.log("Создано:", this.blockControls);
 
 
 		this.blockHide = createElement("div", genID("blockHide"),"blockHide");
@@ -126,28 +123,20 @@ function Constructor(selector){
 
 		this.sortObjects = function(){
 			var elementArray = {};
-			for(var i = 0; i < this.objectJSON.video.length; i++){
-				if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
-					var object = {};
-					object.name = this.objectJSON.video[i].instant;
-					object.type = 'video';
-					object.duration = 0;
-					object.filename = this.objectJSON.video[i].filename;
-					object.html = createElement("video", genID("video"), false, {width: 200}, {src: this.src + this.objectJSON.video[i].filename, preload:"metadata"});
-					elementArray[object.name] = object;
+			for (var mediaType in this.objectJSON){
+				for(var i = 0; i < this.objectJSON[mediaType].length; i++){
+					if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
+						var object = {};
+						object.name = this.objectJSON[mediaType][i].instant;
+						object.type = mediaType;
+						object.duration = 0;
+						object.filename = this.objectJSON[mediaType][i].filename;
+						object.html = createElement("video", genID(mediaType), false, {width: 200}, {src: this.src + this.objectJSON[mediaType][i].filename, preload:"metadata"});
+						elementArray[object.name] = object;
+					}
 				}
 			}
-			for(var i = 0; i < this.objectJSON.audio.length; i++){
-				if(this.objectJSON.audio[i].type != "SPEAKER_CHANGED"){
-					var object = {};
-					object.name = this.objectJSON.audio[i].instant;
-					object.type = 'audio';
-					object.duration = 0;
-					object.filename = this.objectJSON.audio[i].filename;
-					object.html = createElement("video", genID("audio"), false, {width: 100}, {src: this.src + this.objectJSON.audio[i].filename, preload:"metadata"});
-					elementArray[object.name] = object;
-				}
-			}
+			console.log('данные собраны:', elementArray);
 			return elementArray;
 		}.bind(this);
 
@@ -175,11 +164,11 @@ function Constructor(selector){
 			(video.paused) ? video.play() : video.pause();
 		});
 
-		
+
 		this.prev = createElement("button", genID(), "previous-media-buton");
 		this.prev.innerHTML = "Previous";
 		this.blockControls.appendChild(this.prev);
-		
+
 		this.next = createElement("button", genID(), "next-media-buton");
 		this.next.innerHTML = "Next";
 		this.blockControls.appendChild(this.next);
@@ -278,7 +267,7 @@ function Constructor(selector){
 
 
 				var copyMediaList = this.mediaList[element];
-				
+
 				var copyTimeline = divVideo[this.mediaList[element].name];
 
 				if(this.mediaList[element].type == "video"){
