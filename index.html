@@ -22,6 +22,17 @@
 			display: inline-block;
 			height: 20px;
 			/*border: 1px solid black;*/
+			background: gold;
+			border: 1px solid black;
+		}
+		.none-media{
+			display: inline-block;
+			height: 10px;
+			vertical-align: top;
+			margin-top: 5px;
+			background: gray;
+			border: 1px solid gray;
+
 		}
 
 		.one-track-progress {
@@ -149,6 +160,7 @@ function Constructor(selector){
 
 
 
+
 		this.mediaList = this.sortObjects();
 
 		var video = createElement("video", genID("videoblock"), "videoblock");
@@ -201,19 +213,8 @@ function Constructor(selector){
 			}
 		}.bind(this));
 
+var divProgress=[];
 
-		video.addEventListener("timeupdate", function() {
-			if(currentMedia.type == "video"){
-				var currentProgress = this.timelineVideo.querySelectorAll(".one-track")[this.instants.indexOf(currentMedia.name)].querySelector(".one-track-progress");
-				currentProgress.style.width = (100 * video.currentTime/video.duration) + "%";
-		    }
-		    else{
-				var currentProgress = this.timelineAudio.querySelectorAll(".one-track")[this.instants.indexOf(currentMedia.name)].querySelector(".one-track-progress");
-				currentProgress.style.width = (100 * video.currentTime/video.duration) + "%";
-			}
-
-			this.timeBlock.innerHTML = (formatTime(video.currentTime) + "/" + formatTime(video.duration))
-		}.bind(this));
 
 
 		video.addEventListener("ended", function() {
@@ -231,10 +232,20 @@ function Constructor(selector){
 
 		this.instants.forEach(function(element){
 
-			divVideo[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
-
-			divAudio[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
-
+			if (this.mediaList[element].type == "video"){
+				divVideo[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
+				divAudio[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "none-media");
+				var divprog = createElement("div", false, "one-track-progress");
+				divVideo[this.mediaList[element].name].appendChild(divprog);
+				divProgress.push(divprog);
+			}
+			else if(this.mediaList[element].type == "audio"){
+				divVideo[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "none-media");
+				divAudio[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
+				var divprog = createElement("div", false, "one-track-progress");
+				divAudio[this.mediaList[element].name].appendChild(divprog);
+				divProgress.push(divprog);
+			}
 
 			this.timelineVideo.appendChild(divVideo[this.mediaList[element].name]);
 			this.timelineAudio.appendChild(divAudio[this.mediaList[element].name]);
@@ -251,17 +262,17 @@ function Constructor(selector){
 				for(var p in divVideo) {
 						var dur = this.mediaList[p].duration;
 						if(dur != 0){
-							divVideo[p].style.width = (dur * 100 / fullDuration) + '%';
-							divAudio[p].style.width = (dur * 100 / fullDuration) + '%';
+							divVideo[p].style.width = (dur * 1024 / fullDuration)-2 + 'px';
+							divAudio[p].style.width = (dur * 1024 / fullDuration)-2 + 'px';
 						}
 				}
 
-				divVideo[this.mediaList[element].name].style.background= "#" + ((1<<24)*Math.random()|0).toString(16);
-				divAudio[this.mediaList[element].name].style.background= "#" + ((1<<24)*Math.random()|0).toString(16);
+				//divVideo[this.mediaList[element].name].style.background= "#" + ((1<<24)*Math.random()|0).toString(16);
+				//divAudio[this.mediaList[element].name].style.background= "#" + ((1<<24)*Math.random()|0).toString(16);
 
 
-				divVideo[this.mediaList[element].name].appendChild(createElement("div", false, "one-track-progress"));
-				divAudio[this.mediaList[element].name].appendChild(createElement("div", false, "one-track-progress"));
+				//divVideo[this.mediaList[element].name].appendChild();
+				//divAudio[this.mediaList[element].name].appendChild(createElement("div", false, "one-track-progress"));
 
 
 				var link = this.src + this.mediaList[element].filename;
@@ -274,7 +285,7 @@ function Constructor(selector){
 				if(this.mediaList[element].type == "video"){
 					divVideo[this.mediaList[element].name].addEventListener("click", function(e){
 						if(copyMediaList == currentMedia){
-							var percentTime = (e.pageX - copyTimeline.querySelector(".one-track-progress").offsetLeft) / (copyTimeline.offsetWidth);
+							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 							video.currentTime = percentTime * currentMedia.duration;
 						}
 						else{
@@ -286,7 +297,7 @@ function Constructor(selector){
 				else {
 					divAudio[this.mediaList[element].name].addEventListener("click", function(e){
 						if(copyMediaList == currentMedia){
-							var percentTime = (e.pageX - copyTimeline.querySelector(".one-track-progress").offsetLeft) / (copyTimeline.offsetWidth);
+							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 							video.currentTime = percentTime * currentMedia.duration;
 						}
 						else{
@@ -298,8 +309,20 @@ function Constructor(selector){
 
 			 }.bind(this))
 		}.bind(this))
+		divProgress.forEach(function(element){
+			video.addEventListener("timeupdate", function() {
+	console.log(element);
+				element.style.width = (100 * video.currentTime/video.duration) + "%";
+
+				this.timeBlock.innerHTML = (formatTime(video.currentTime) + "/" + formatTime(video.duration))
+			}.bind(this));
+	}.bind(this));
+
+
 
 }
+
+
 
   this.playerList = [];
   this.init = function(){
