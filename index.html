@@ -3,17 +3,50 @@
 		<meta charset="utf-8">
 	</head>
 	<style>
+
 		video{
-			border: 1px solid;
-			height: 170;
+			/*border: 1px solid;*/
+			/*height: 170;*/
 		}
+
+		.videoblock{
+			 width: 1024px;
+			height: 605px;
+		}
+
+		.timeline{
+			height: 20px;
+		}
+
 		.one-track{
 			display: inline-block;
 			height: 20px;
 			/*border: 1px solid black;*/
-				}
-		.videoblock{
-			height: 400;
+		}
+
+		.one-track-progress {
+			width: 0%;
+		    height: inherit;
+		    display: block;
+		    background-color: black;
+		}
+
+		.media-container{
+			width: 1024px;
+		}
+
+		.blockControls{
+			width: 1024px;
+		}
+
+		.blockMedia{
+           /* background: black;*/
+			width: 1024px;
+			height: 605px;
+		}
+
+		.blockHide{
+			display: none;
 		}
 	</style>
 	<script src="script.js" charset="utf-8"></script>
@@ -22,8 +55,10 @@
 
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/" style="background: aliceblue;margin-bottom: 100px;">
 </div>
-<!--<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
+
+<!-- <div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: #c1eded;">
 </div> -->
+
 </body>
 </html>
 
@@ -50,9 +85,21 @@ function Constructor(selector){
 		console.log("Создано:",this.blockMedia);
 
 		this.blockControls = createElement("div", genID("blockControls"), "blockControls");
-		this.timeline = createElement("div", genID("timeline"), "timeline");
-		this.blockControls.appendChild(this.timeline);
+		
+		this.timeBlock = createElement("div", genID("timeblock"), "time-block");
+		this.blockControls.appendChild(this.timeBlock);
+
+		this.timelineVideo = createElement("div", genID("timeline"), "timeline");
+		this.blockControls.appendChild(this.timelineVideo);
+
+		this.timelineAudio = createElement("div", genID("timeline"), "timeline");
+		this.blockControls.appendChild(this.timelineAudio);
+
+
+
+
 		console.log("Создано:",this.blockControls);
+
 
 		this.blockHide = createElement("div", genID("blockHide"),"blockHide");
 		console.log("Создано:",this.blockHide);
@@ -106,19 +153,20 @@ function Constructor(selector){
 
 
 		this.lastElementDuration = 0;
-		var div = {};
+		var divVideo = {};
+		var divAudio = {};
     	var fullDuration = 0;
 
 
 
 		this.mediaList = this.sortObjects();
 
-		var video = createElement("video", genID("videoblock"), "videoblock", {"controls":""});
+		var video = createElement("video", genID("videoblock"), "videoblock");
 		video.src = this.src + this.mediaList[this.instants[0]].filename;
 		this.blockMedia.appendChild(video);
 
-		this.currentMedia = this.mediaList[this.instants[0]];
-		console.log("first current :" , this.currentMedia);
+		var currentMedia = this.mediaList[this.instants[0]];
+		console.log("first current :" , currentMedia);
 
 		this.playpause = createElement("button", genID("playpause"), "playpause-buton");
 		this.playpause.innerHTML = "Play/Pause";
@@ -128,65 +176,138 @@ function Constructor(selector){
 		});
 
 		
-
-		this.next = createElement("button", genID(), "next-media-buton");
-		this.next.innerHTML = "Next";
-		this.blockControls.appendChild(this.next);
 		this.prev = createElement("button", genID(), "previous-media-buton");
 		this.prev.innerHTML = "Previous";
 		this.blockControls.appendChild(this.prev);
+		
+		this.next = createElement("button", genID(), "next-media-buton");
+		this.next.innerHTML = "Next";
+		this.blockControls.appendChild(this.next);
 
 
 
 		this.next.addEventListener("click", function(){
-			for(var i = 0; i < this.instants.length; i++){
-				if(this.instants[i] == this.currentMedia.name){
-					console.log(this.mediaList[this.instants[i]]);
-					/*video.src = this.src + this.mediaList[this.instants[i+1]].filename;
-					this.currentMedia = this.mediaList[this.instants[i+1]];*/
-				}
+			if(this.instants.indexOf(currentMedia.name) == -1){
+				video.src = this.src + this.mediaList[this.instants[0]].filename;
+			}
+			else if(this.instants.indexOf(currentMedia.name) == this.instants.length-1){
+			}
+			else{
+				video.src = this.src + this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)+1]].filename;
+				currentMedia = this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)+1]];
+			}
+		}.bind(this));
 
+
+		this.prev.addEventListener("click", function(){
+			if(this.instants.indexOf(currentMedia.name) == -1){
+				video.src = this.src + this.mediaList[this.instants[0]].filename;
+			}
+			else if(this.instants.indexOf(currentMedia.name) == 0){
+			}
+			else{
+				video.src = this.src + this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)-1]].filename;
+				currentMedia = this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)-1]];
+			}
+		}.bind(this));
+
+
+		video.addEventListener("timeupdate", function() {
+			if(currentMedia.type == "video"){
+				var currentProgress = this.timelineVideo.querySelectorAll(".one-track")[this.instants.indexOf(currentMedia.name)].querySelector(".one-track-progress");
+				currentProgress.style.width = (100 * video.currentTime/video.duration) + "%";
+		    }
+		    else{
+				var currentProgress = this.timelineAudio.querySelectorAll(".one-track")[this.instants.indexOf(currentMedia.name)].querySelector(".one-track-progress");
+				currentProgress.style.width = (100 * video.currentTime/video.duration) + "%";
+			}
+
+			this.timeBlock.innerHTML = (formatTime(video.currentTime) + "/" + formatTime(video.duration))
+		}.bind(this));
+
+
+		video.addEventListener("ended", function() {
+			if(this.instants.indexOf(currentMedia.name) == -1){
+				video.src = this.src + this.mediaList[this.instants[0]].filename;
+			}
+			else if(this.instants.indexOf(currentMedia.name) == this.instants.length-1){
+			}
+			else{
+				video.src = this.src + this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)+1]].filename;
+				currentMedia = this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)+1]];
 			}
 		}.bind(this));
 
 
 		this.instants.forEach(function(element){
 
-			div[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
-			this.timeline.appendChild(div[this.mediaList[element].name]);
+			divVideo[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
+
+			divAudio[this.mediaList[element].name] = createElement("div", genID(this.mediaList[element].name), "one-track");
+
+
+			this.timelineVideo.appendChild(divVideo[this.mediaList[element].name]);
+			this.timelineAudio.appendChild(divAudio[this.mediaList[element].name]);
+
 
 			this.blockHide.appendChild(this.mediaList[element].html);
+
 			this.mediaList[element].html.addEventListener("loadedmetadata", function(){
 				this.mediaList[element].duration = this.mediaList[element].html.duration;
-      //  div[this.mediaList[element].name].innerHTML = this.mediaList[element].name;
+
+				console.log(this.mediaList[element].type);
+
 				fullDuration = fullDuration + this.mediaList[element].duration;
-				for(var p in div) {
+				for(var p in divVideo) {
 						var dur = this.mediaList[p].duration;
 						if(dur != 0){
-							div[p].style.width = (dur * 100 / fullDuration) + '%';
+							divVideo[p].style.width = (dur * 100 / fullDuration) + '%';
+							divAudio[p].style.width = (dur * 100 / fullDuration) + '%';
 						}
 				}
 
-				div[this.mediaList[element].name].style.background= "#"+((1<<24)*Math.random()|0).toString(16);
+				divVideo[this.mediaList[element].name].style.background= "#" + ((1<<24)*Math.random()|0).toString(16);
+				divAudio[this.mediaList[element].name].style.background= "#" + ((1<<24)*Math.random()|0).toString(16);
+
+
+				divVideo[this.mediaList[element].name].appendChild(createElement("div", false, "one-track-progress"));
+				divAudio[this.mediaList[element].name].appendChild(createElement("div", false, "one-track-progress"));
+
+
 				var link = this.src + this.mediaList[element].filename;
 
 
-				var temp_var = this.mediaList[element];
-				div[this.mediaList[element].name].addEventListener("click", function(){
-					video.src = link;
-					this.currentMedia = temp_var;
-					console.log("change current :", this.currentMedia);
-				});
+				var copyMediaList = this.mediaList[element];
+				
+				var copyTimeline = divVideo[this.mediaList[element].name];
 
+				if(this.mediaList[element].type == "video"){
+					divVideo[this.mediaList[element].name].addEventListener("click", function(e){
+						if(copyMediaList == currentMedia){
+							var percentTime = (e.pageX - copyTimeline.querySelector(".one-track-progress").offsetLeft) / (copyTimeline.offsetWidth);
+							video.currentTime = percentTime * currentMedia.duration;
+						}
+						else{
+							video.src = link;
+							currentMedia = copyMediaList;
+						}
+					});
+				}
+				else {
+					divAudio[this.mediaList[element].name].addEventListener("click", function(e){
+						if(copyMediaList == currentMedia){
+							var percentTime = (e.pageX - copyTimeline.querySelector(".one-track-progress").offsetLeft) / (copyTimeline.offsetWidth);
+							video.currentTime = percentTime * currentMedia.duration;
+						}
+						else{
+							video.src = link;
+							currentMedia = copyMediaList;
+						}
+					});
+				}
 
 			 }.bind(this))
-
-
 		}.bind(this))
-
-
-
-
 
 }
 
