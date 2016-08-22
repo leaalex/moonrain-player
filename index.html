@@ -65,7 +65,7 @@
 
 <script type="text/javascript">
 
-console.log("v0.1.53 'length' ");
+console.info("v0.1.53 'length' ");
 
 function Constructor(selector){
 
@@ -82,7 +82,7 @@ function Constructor(selector){
 		this.container = HTMLElement;
 
 		this.blockMedia = createElement("div", genID("blockMedia"),  "blockMedia", {width:"auto"})
-		console.log("Создано:",this.blockMedia);
+		console.info("Создано:", this.blockMedia);
 
 		this.blockControls = createElement("div", genID("blockControls"), "blockControls");
 
@@ -95,11 +95,11 @@ function Constructor(selector){
 		this.timelineAudio = createElement("div", genID("timeline"), "timeline");
 		this.blockControls.appendChild(this.timelineAudio);
 
-		console.log("Создано:", this.blockControls);
+		console.info("Создано:", this.blockControls);
 
 
 		this.blockHide = createElement("div", genID("blockHide"),"blockHide");
-		console.log("Создано:",this.blockHide);
+		console.info("Создано:", this.blockHide);
 
 		this.container.appendChild(this.blockMedia);
 		this.container.appendChild(this.blockControls);
@@ -119,24 +119,25 @@ function Constructor(selector){
 		this.objectJSON = getObjectJSON("https://crossorigin.me/" + this.src + "metadata.json");
 
 		//Получение всех instant и сортировка их по возростанию
-		this.instants = (mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"))).sort(function(a, b) {return a-b} );
+		this.instants = (mediaObjects(this.objectJSON, "video", "instant").concat(mediaObjects(this.objectJSON, "audio", "instant"))).sort(function(a, b) {return a-b});
 
 		this.sortObjects = function(){
 			var elementArray = {};
 			for (var mediaType in this.objectJSON){
 				for(var i = 0; i < this.objectJSON[mediaType].length; i++){
-					if(this.objectJSON.video[i].type != "SPEAKER_CHANGED"){
+					if(this.objectJSON[mediaType][i].type != "SPEAKER_CHANGED"){
 						var object = {};
+
 						object.name = this.objectJSON[mediaType][i].instant;
 						object.type = mediaType;
 						object.duration = 0;
 						object.filename = this.objectJSON[mediaType][i].filename;
 						object.html = createElement("video", genID(mediaType), false, {width: 200}, {src: this.src + this.objectJSON[mediaType][i].filename, preload:"metadata"});
+
 						elementArray[object.name] = object;
 					}
 				}
 			}
-			console.log('данные собраны:', elementArray);
 			return elementArray;
 		}.bind(this);
 
