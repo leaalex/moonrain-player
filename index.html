@@ -332,7 +332,7 @@ function Constructor(selector){
 				var copyTimeline = divVideo[this.mediaList[element].name];
 
 				if(this.mediaList[element].type == "video"){
-					
+
 					/*divVideo[this.mediaList[element].name].addEventListener("onmousedown", function(e){
 
 						var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
@@ -340,12 +340,18 @@ function Constructor(selector){
 
 					});*/
 
-					divVideo[this.mediaList[element].name].addEventListener("click", function(e){
+					  /*divVideo[this.mediaList[element].name].addEventListener("mousedown", function( event ) {
+					  	console.log(event.pageX);
+					  	var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
+						divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
+  						
+  						});*/
+
+					divVideo[this.mediaList[element].name].addEventListener("mousedown", function(e){
 						if(copyMediaList == currentMedia){
 							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 							divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
 							video.currentTime = percentTime * currentMedia.duration;
-							
 						}
 						else{
 							video.src = link;
@@ -354,9 +360,11 @@ function Constructor(selector){
 						}
 					});
 
+
+
 				}
 				else {
-					divAudio[this.mediaList[element].name].addEventListener("click", function(e){
+					divAudio[this.mediaList[element].name].addEventListener("mousedown", function(e){
 						if(copyMediaList == currentMedia){
 							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 							divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
