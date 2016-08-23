@@ -75,6 +75,13 @@
 		    box-shadow: 0 0 7px black
 		}
 
+		.volume-block{
+			display: inline-flex;
+		}
+
+		.volume-percent{
+			color: white;
+		}
 		/* Круглый слайдер */
 	/* .progress-slider {
 		    width: 26px;
@@ -97,8 +104,9 @@
 <div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/" style="background: black; margin-bottom: 100px;">
 </div>
 
-<!-- <div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: black; margin-bottom: 100px;">
-</div> --> 
+<!--<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: black; margin-bottom: 100px;">
+</div>-->
+
 </body>
 </html>
 
@@ -202,7 +210,14 @@ function Constructor(selector){
 
 		var currentMedia = this.mediaList[this.instants[0]];
 
-		
+		this.volumeBlock = createElement("div", false, "volume-block");
+		this.volumePercent = createElement("div", false, "volume-percent");
+		this.volumeInput = createElement("input", false, "volume", {"type":"range", "min":"0", "max":"1", "step":"0.01"});
+		this.volumePercent.innerHTML = Math.round((this.volumeInput.value * 100)) + " %";
+
+		this.volumeBlock.appendChild(this.volumePercent);
+		this.volumeBlock.appendChild(this.volumeInput);
+
 
 
 
@@ -225,7 +240,7 @@ function Constructor(selector){
 		this.blockControls.appendChild(this.next);
 
 		this.blockControls.appendChild(this.timeBlock);
-
+		this.blockControls.appendChild(this.volumeBlock);
 		
 		
 		this.next.addEventListener("click", function(){
@@ -275,7 +290,14 @@ function Constructor(selector){
 			}
 		}.bind(this));
 
-		//divProgress[currentMedia.name].appendChild(progressSlider);
+
+		this.volumeInput.addEventListener('input', function()
+		{
+			video.volume = this.volumeInput.value;
+			this.volumePercent.innerHTML = Math.round((this.volumeInput.value * 100)) + " %";
+			console.log('input changed to: ', this.volumeInput.value);
+
+		}.bind(this));
 
 
 
