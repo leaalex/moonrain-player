@@ -238,7 +238,7 @@ function Constructor(selector){
 				video.src = this.src + this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)+1]].filename;
 				currentMedia = this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)+1]];
 				divProgress[currentMedia.name].appendChild(progressSlider);
-
+				video.currentTime = 0;
 			}
 		}.bind(this));
 
@@ -253,6 +253,7 @@ function Constructor(selector){
 				video.src = this.src + this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)-1]].filename;
 				currentMedia = this.mediaList[this.instants[this.instants.indexOf(currentMedia.name)-1]];
 				divProgress[currentMedia.name].appendChild(progressSlider);
+				video.currentTime = 0;
 			}
 		}.bind(this));
 
@@ -331,18 +332,28 @@ function Constructor(selector){
 				var copyTimeline = divVideo[this.mediaList[element].name];
 
 				if(this.mediaList[element].type == "video"){
+					
+					/*divVideo[this.mediaList[element].name].addEventListener("onmousedown", function(e){
+
+						var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
+						divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
+
+					});*/
+
 					divVideo[this.mediaList[element].name].addEventListener("click", function(e){
 						if(copyMediaList == currentMedia){
 							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 							divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
 							video.currentTime = percentTime * currentMedia.duration;
-							//divProgress[currentMedia.name].appendChild(progressSlider);
+							
 						}
 						else{
 							video.src = link;
 							currentMedia = copyMediaList;
+							divProgress[currentMedia.name].appendChild(progressSlider);
 						}
 					});
+
 				}
 				else {
 					divAudio[this.mediaList[element].name].addEventListener("click", function(e){
@@ -350,11 +361,12 @@ function Constructor(selector){
 							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 							divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
 							video.currentTime = percentTime * currentMedia.duration;
-							//divProgress[currentMedia.name].appendChild(progressSlider);
+							
 						}
 						else{
 							video.src = link;
 							currentMedia = copyMediaList;
+							divProgress[currentMedia.name].appendChild(progressSlider);
 						}
 					});
 				}
@@ -364,15 +376,11 @@ function Constructor(selector){
 
 		divProgress[currentMedia.name].appendChild(progressSlider);
 
-			video.addEventListener("timeupdate", function() {
-
-				divProgress[currentMedia.name].appendChild(progressSlider);
-
-				divProgress[currentMedia.name].style.width = (100 * video.currentTime/video.duration) + "%";
-
-				this.timeBlock.innerHTML = (formatTime(video.currentTime) + "/" + formatTime(video.duration))
-
-			}.bind(this));
+		video.addEventListener("timeupdate", function() {
+			divProgress[currentMedia.name].appendChild(progressSlider);
+			divProgress[currentMedia.name].style.width = (100 * video.currentTime/video.duration) + "%";
+			this.timeBlock.innerHTML = (formatTime(video.currentTime) + "/" + formatTime(video.duration))
+		}.bind(this));
 
 
 
