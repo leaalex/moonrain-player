@@ -345,8 +345,9 @@ function Constructor(selector){
 					  	var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 						divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
   						
-  						});*/
+  						});*/ 
 
+  						
 					divVideo[this.mediaList[element].name].addEventListener("mousedown", function(e){
 						if(copyMediaList == currentMedia){
 							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
