@@ -101,11 +101,12 @@
 <body>
 
 
-<div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-06-17.10-19-41.6f5ef8098b922eb3_12345678/" style="background: black; margin-bottom: 100px;">
+<div id="id" class="media-container" data-wight="1280" data-src="https://rec.edu-kuban.ru/2016-09-08.16-53-17.8e19d71e29f850d8_rewq/" style="background: black; margin-bottom: 100px;">
 </div>
 
 <!--<div class="media-container" data-widht="1280" data-src="https://rec.edu-kuban.ru/2016-06-03.17-10-57.3950c7fb2ff18e0a_12356/" style="background: black; margin-bottom: 100px;">
 </div>-->
+
 
 </body>
 </html>
@@ -135,7 +136,7 @@ function Constructor(selector){
 		this.blockControls = createElement("div", genID("blockControls"), "blockControls");
 
 		this.timeBlock = createElement("div", genID("timeBlock"), "timeBlock");
-		
+
 
 		this.timelineVideo = createElement("div", genID("timeline"), "timeline");
 		this.blockControls.appendChild(this.timelineVideo);
@@ -196,16 +197,16 @@ function Constructor(selector){
 		var divProgress={};
 
     	var fullDuration = 0;
-		
+
 
 
 		this.mediaList = this.sortObjects();
-		
+
 		var progressSlider = createElement("div", false, "progress-slider");
 
 		var video = createElement("video", genID("videoblock"), "videoblock");
 		video.src = this.src + this.mediaList[this.instants[0]].filename;
-		
+
 		this.blockMedia.appendChild(video);
 
 		var currentMedia = this.mediaList[this.instants[0]];
@@ -241,8 +242,8 @@ function Constructor(selector){
 
 		this.blockControls.appendChild(this.timeBlock);
 		this.blockControls.appendChild(this.volumeBlock);
-		
-		
+
+
 		this.next.addEventListener("click", function(){
 			if(this.instants.indexOf(currentMedia.name) == -1){
 				video.src = this.src + this.mediaList[this.instants[0]].filename;
@@ -272,7 +273,7 @@ function Constructor(selector){
 			}
 		}.bind(this));
 
-		
+
 
 
 
@@ -366,7 +367,7 @@ function Constructor(selector){
 					  	console.log(event.pageX);
 					  	var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 						divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
-  						
+
   						});*/
 
 					divVideo[this.mediaList[element].name].addEventListener("mousedown", function(e){
@@ -391,7 +392,7 @@ function Constructor(selector){
 							var percentTime = (e.pageX - divprog.offsetLeft) / (copyTimeline.offsetWidth);
 							divProgress[currentMedia.name].style.width = (100 * (percentTime * currentMedia.duration)/video.duration) + "%";
 							video.currentTime = percentTime * currentMedia.duration;
-							
+
 						}
 						else{
 							video.src = link;
@@ -430,6 +431,6 @@ function Constructor(selector){
   };
 }
 
-var x = new Constructor(); 
+var x = new Constructor();
 x.init();
 </script>
