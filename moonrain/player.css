@@ -1,1 +1,201 @@
+.player{
+    width: 854px;
+    height: 600px;
+    background: url(sierra-2.jpg);
+    position: relative;
+    background-size: cover;
+}
 
+.player:hover .bottom{
+	opacity: 1;
+}
+
+.progress{
+
+}
+
+.controls{
+	height: 36px;
+}
+
+.bottom{
+	width: 830px;
+	left:12px;
+	position: absolute;
+	bottom:0;
+	opacity: 1;
+
+		transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+		-webkit-transition: opacity .25s ease-in-out;
+}
+
+.control-timer{
+    border-radius: 2px;
+	height: 36px;
+	color: white;
+	background: rgba(255, 255, 255, 0.25);
+	display: inline-block;
+	font-family: sans-serif;
+	padding: 0 10px;
+	position: relative;
+	vertical-align: top;
+	line-height: 37px;
+}
+
+.timer{
+	top: 10px;
+}
+
+.control-button{
+    border-radius: 2px;
+	width: 36px;
+	height: 36px;
+	background: rgba(255, 255, 255, 0.25);
+	display: inline-block;
+	position: relative;
+}
+
+.control-settings{
+	/*vertical-align: top;*/
+    border-radius: 2px;
+    /*line-height: 38px;*/
+    /*padding: 0 10px;*/
+    height: 36px;
+    background: rgba(255, 255, 255, 0.25);
+    display: inline-block;
+    position: relative;
+}
+
+.control-volume{
+    border-radius: 2px;
+	height: 36px;
+	background: rgba(255, 255, 255, 0.25);
+	display: inline-block;
+	position: relative;
+}
+
+.control-volume:hover .volume-value{
+	display: inline-block;
+}
+
+.volume-value{
+	display: none;
+	top: -6px;
+    position: relative;
+    width: 72px;
+    margin: 0 10px 0 -8px;
+}
+
+.control-button:hover{
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.control-settings:hover{
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.controls-left{
+	float: left;
+	position: relative;
+}
+
+.controls-right{
+	float: right;
+}
+
+.circle-button{
+	height: 24px;
+	background: beige;
+	width: 24px;
+	border-radius: 12px;
+	left: 6px;
+	top: 6px;
+	position: relative;
+}
+
+.play-image, .pause-image{
+	display: none;
+}
+
+svg.active{
+	display: block;
+}
+
+.progress-video{
+	background: rgba(255, 255, 255, 0.5);
+	height: 6px;
+	border-top-right-radius: 2px;
+	border-top-left-radius: 2px;
+}
+
+.progress-video:hover{
+	cursor: pointer;
+}
+
+.progress-video div{
+	display: inline-block;
+}
+
+.progress-viewed{
+	width: 0px;
+	height: 6px;
+}
+
+.progress-active{
+	background: rgba(241, 43, 36, 0.85);
+	border-top-right-radius: 2px;
+	border-top-left-radius: 2px;
+}
+
+.progress-inactive{
+	background: rgba(255, 255, 255, 0.5);
+	border-top-right-radius: 2px;
+	border-top-left-radius: 2px;
+}
+
+.progress-audio{
+	margin-bottom: 6px;
+	background: rgba(255, 235, 59, 0.8);
+	height: 2px;
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+.scrubber-line{
+	width: 2px;
+	background: white;
+	position: absolute;
+	left:  5px;
+	height: 60px;
+}
+
+.scrubber-circle{
+	top: -2px;
+	height: 8px;
+	width: 8px;
+	border: 2px solid white;
+	border-radius: 10px;
+	position: absolute;
+	background: red;
+	box-shadow: 0 0 4px black;
+}
+
+.scrubber{
+	position: absolute;
+	left: -6px;
+	top: 0;
+}
+
+.scrubber:hover{
+	cursor: pointer;
+}
+.settings-input{
+	display: none;
+    top: -13px;
+    position: relative;
+    width: 100px;
+    margin: 0px 0 0 10px;
+}
