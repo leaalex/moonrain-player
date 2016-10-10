@@ -2,9 +2,39 @@ function findPlayer(){
 
 }
 function createPlayer(){
+    var blockMedia;
+    var video;
+    blockMedia.appendChild(video);
+    var blockControls;
+    var progress;
+    for (var element in elements){
+        var timeline;
+        var timelineVideo;
+        var timelineAudio;
+        timeline.appendChild(timelineVideo);
+        timeline.appendChild(timelineAudio);
+        progress.appendChild(timeline);
+    }
+    var scrubber;
+    progress.appendChild(scrubber);
+
+    var controls;
+    var leftControls;
+    var buttonPlayPouse;
+    var buttonStop;
+    var buttonPrev;
+    var buttonNext;
+    var buttonVolume;
+    var timer;
 
 
+
+
+    blockControls.appendChild(progress);
+    blockControls.appendChild(controls);
+    var blockHide;
 }
+
 function createElement(tagName, id, classList, attributes, properties){
     var element = document.createElement(tagName);
     if(classList){
@@ -37,3 +67,13 @@ function createMediaElement(type, name, src){
     element.appendChild(source);
     return element;
 }
+
+function append(element, array){
+
+}
+
+Element.prototype.appendChildren = function(){
+    for (var key in arguments){
+        this.appendChild(arguments[key]);
+    }
+};

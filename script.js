@@ -87,7 +87,8 @@ function formatTime(time) {
         var s = Math.floor(time % 60);
 
         return h.lead0(2)  + ":" + m.lead0(2) + ":" + s.lead0(2);
-    } else {
+    }
+    else {
         var m = Math.floor(time / 60);
         var s = Math.floor(time % 60);
 
