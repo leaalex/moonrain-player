@@ -1,3 +1,9 @@
+
+function initialization(selector){
+
+
+}
+
 function findPlayer(selector){
 	var element = document.querySelector(selector);
 	element.src = element.dataset.src;
