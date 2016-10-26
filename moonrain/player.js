@@ -1,13 +1,63 @@
+function MoonrainPlayer() {
+    var mediaObject = {};
 
-function initialization(selector){
+    function genID(value) {
+        var value = value || "id"
+        return value +"_" + Math.random().toString(16).substr(2, 8).toUpperCase();
+    }
+
+    this.init = function(selector){
+        this.start = function(){
+
+            Array.prototype.filter.call(document.querySelectorAll(selector), function(element){return element.dataset.status === undefined;}).forEach(function(element, i ,array){
+                element.dataset.status = "activate";
+
+                this.constructor(element);
+            }.bind(this));
+
+            setTimeout(this.start.bind(this), 1000);
+
+        };
+        this.start(selector);
+        return mediaObject;
+    };
+
+    this.constructor = function(element){
+        console.log("констрирую "+ element);
+        element.appendChild(createPlayer());
+        mediaObject[genID()] = element;
+
+        var j = jsonTest(element);
+
+       for (var i in j.video){
+            if(j.video[i].filename != undefined){
+                console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");
+
+                var video = createMediaElement("video", j.video[i].filename, element.dataset.src);
+
+                element.appendChild(video);
+            }
+       }
+      for (var i in j.audio){
+            if(j.audio[i].filename != undefined){
+                console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");
+
+                var audio = createMediaElement("audio", j.audio[i].filename, element.dataset.src);
+
+                element.appendChild(audio);
+            }
+       }
+        
+    };
 
 
 }
 
-function findPlayer(selector){
-	var element = document.querySelector(selector);
-	element.src = element.dataset.src;
-	return element;
+
+
+function initialization(selector){
+
+
 }
 
 function createElement(tagName, id, classList, attributes, properties){
@@ -37,7 +87,7 @@ function genID(value){
 }
 
 function createMediaElement(type, name, src){
-    var element = createElement(type, genID(type), 'class_'+type, false, {controls:false, preload:"metadata"});
+    var element = createElement(type, genID(type), 'class_'+type, false, {controls:true, preload:"metadata"});
     var source = createElement("source", false, false, false, {src:src + name, type: "video/webm"});
     element.appendChild(source);
     return element;
@@ -73,11 +123,15 @@ function getObjectJSON(urlJSON){
     return objectJSON;
 }
 
+function jsonTest(element){
+    var objectJSON = getObjectJSON("https://crossorigin.me/" + element.dataset.src + "metadata.json");
+    return objectJSON;
+}
 
 
 function createPlayer(){
 
-	var temp_elements = [1, 1, 1, 1];
+	var temp_elements = [1, 1, 1, 1, 1];
 
     var blockMedia = createElement("div", false, "player", false, false);
     var video = createElement("div", false, false, false, false);
