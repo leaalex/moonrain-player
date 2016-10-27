@@ -27,27 +27,66 @@ function MoonrainPlayer() {
         element.appendChild(createPlayer());
         mediaObject[genID()] = element;
 
-        var j = jsonTest(element);
+        videoObjects = [];
+        audioObjects = [];
 
-       for (var i in j.video){
-            if(j.video[i].filename != undefined){
-                console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");
 
-                var video = createMediaElement("video", j.video[i].filename, element.dataset.src);
+        mediaObjects = {};	
 
+
+        var jsonObject = jsonTest(element);
+
+
+       for (var i in jsonObject.video){
+            if(jsonObject.video[i].filename != undefined){
+                /*console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");*/
+                var video = createMediaElement("video", jsonObject.video[i].filename, element.dataset.src);
                 element.appendChild(video);
-            }
+                videoObjects[i] = video;
+				var id  = genId();
+				mediaObjects[id] = video;
+				mediaObjects.id.type = "video";		        		
+           }
        }
-      for (var i in j.audio){
-            if(j.audio[i].filename != undefined){
-                console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");
 
-                var audio = createMediaElement("audio", j.audio[i].filename, element.dataset.src);
+       	videoObjects.forEach(function(element){
+			element.addEventListener("loadedmetadata", function(){
+				console.log("video: ", element.duration);
 
+             });
+       	});
+
+
+
+
+      for (var i in jsonObject.audio){
+            if(jsonObject.audio[i].filename != undefined){
+                var audio = createMediaElement("audio", jsonObject.audio[i].filename, element.dataset.src);
                 element.appendChild(audio);
+                audioObjects[i] = audio;
+                
             }
        }
-        
+
+       	function addAudioInHideBlock(mediaObject){
+
+
+       	}
+
+
+       	audioObjects.forEach(function(element, index, object){
+			
+			element.addEventListener("loadedmetadata", function(){
+				//console.log("audio: ", element.readyState);
+				console.log("audio: "); //, element.duration);
+				console.log(index);
+				//object.splice(index, 1);
+             });
+
+       	});
+
+      // console.log(mediaObject);
+
     };
 
 
@@ -87,7 +126,7 @@ function genID(value){
 }
 
 function createMediaElement(type, name, src){
-    var element = createElement(type, genID(type), 'class_'+type, false, {controls:true, preload:"metadata"});
+    var element = createElement(type, genID(type), 'class_'+type, false, {controls:true, preload:"auto"});
     var source = createElement("source", false, false, false, {src:src + name, type: "video/webm"});
     element.appendChild(source);
     return element;
@@ -191,7 +230,7 @@ function createPlayer(){
     controls.appendChildren(leftControls, rightControls);
     blockControls.appendChildren(progress, controls);
 
-    var blockHide = createElement("div", false, false, false, false);
+    var blockHide = createElement("div", false, "hide-videos", false, false);
 
 	blockMedia.appendChildren(video, blockControls, blockHide);
 
