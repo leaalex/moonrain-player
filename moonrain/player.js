@@ -1,29 +1,37 @@
-function MoonrainPlayer() {
+function MoonrainPlayer(selector) {
+// Переменные
     var mediaObject = {};
 
-    function genID(value) {
-        var value = value || "id"
-        return value +"_" + Math.random().toString(16).substr(2, 8).toUpperCase();
+    if(selector === undefined){
+        selector = ".moonrainplayer";
     }
 
-    this.init = function(selector){
-        this.start = function(){
+    function genID(value) {
+        value = value || "id";
+        return value +"_" + Math.random().toString(16).substr(2, 8).toUpperCase();
+    }
+    // Функция перебора элементов подходящих под требования
+    function start(){
+        console.log('старт запстился, селектор '+ selector, this);
+        Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
+            return element.dataset.status === undefined;
+        }).forEach(function(element, i ,array){
+            element.dataset.status = "activate";
+            constructor(element);
+        });
+        setTimeout(start, 1000);
+    }
+    //TODO: Функция проверки не запушена ли библиотека уже!
 
-            Array.prototype.filter.call(document.querySelectorAll(selector), function(element){return element.dataset.status === undefined;}).forEach(function(element, i ,array){
-                element.dataset.status = "activate";
 
-                this.constructor(element);
-            }.bind(this));
 
-            setTimeout(this.start.bind(this), 1000);
-
-        };
-        this.start(selector);
+    this.init = function(){
+        start();
         return mediaObject;
     };
 
-    this.constructor = function(element){
-        console.log("констрирую "+ element);
+
+    function constructor(element){
         element.appendChild(createPlayer());
         mediaObject[genID()] = element;
 
@@ -31,7 +39,7 @@ function MoonrainPlayer() {
         audioObjects = [];
 
 
-        mediaObjects = {};	
+        mediaObjects = {};
 
 
         var jsonObject = jsonTest(element);
@@ -43,9 +51,9 @@ function MoonrainPlayer() {
                 var video = createMediaElement("video", jsonObject.video[i].filename, element.dataset.src);
                 element.appendChild(video);
                 videoObjects[i] = video;
-				var id  = genId();
+				var id  = genID();
 				mediaObjects[id] = video;
-				mediaObjects.id.type = "video";		        		
+				mediaObjects[id].type = "video";
            }
        }
 
@@ -64,7 +72,7 @@ function MoonrainPlayer() {
                 var audio = createMediaElement("audio", jsonObject.audio[i].filename, element.dataset.src);
                 element.appendChild(audio);
                 audioObjects[i] = audio;
-                
+
             }
        }
 
@@ -75,7 +83,7 @@ function MoonrainPlayer() {
 
 
        	audioObjects.forEach(function(element, index, object){
-			
+
 			element.addEventListener("loadedmetadata", function(){
 				//console.log("audio: ", element.readyState);
 				console.log("audio: "); //, element.duration);
