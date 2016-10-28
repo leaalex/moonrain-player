@@ -1,6 +1,7 @@
 function MoonrainPlayer(selector) {
 // Переменные
     var mediaObject = {};
+    var timeOut;
 
     if(selector === undefined){
         selector = ".moonrainplayer";
@@ -16,10 +17,28 @@ function MoonrainPlayer(selector) {
         Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
             return element.dataset.status === undefined;
         }).forEach(function(element, i ,array){
+          //  console.log(element);
             element.dataset.status = "activate";
             constructor(element);
         });
-        setTimeout(start, 1000);
+
+        function checkStop(){
+            var dataActiveCount = 0;
+            document.querySelectorAll(selector).forEach(function(elem, index){
+                if (elem.dataset.status == "activate"){
+                    dataActiveCount = index;
+                }
+            });
+            console.log("Сравнение: ", document.querySelectorAll(selector).length - 1, dataActiveCount);
+            if (document.querySelectorAll(selector).length - 1 == dataActiveCount){
+                clearTimeout(timeOut);
+            }
+        }
+
+        timeOut = setTimeout(function(){ 
+            start(); 
+            checkStop(); 
+        }, 1000);
     }
     //TODO: Функция проверки не запушена ли библиотека уже!
 
