@@ -1,3 +1,7 @@
+	.hide-videos{
+		display: none;
+	}
+
 	.player{
 	    width: 854px;
 	    height: 600px;

@@ -67,11 +67,11 @@ function MoonrainPlayer(selector) {
         request.onreadystatechange = function(e) {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    console.log("Загрузка успешно завершена: " , urlJSON);
+                    console.info("Загрузка успешно завершена: " , urlJSON);
                     objectJSON = JSON.parse(this.responseText);
                 }
                 else {
-                    console.log("Ошибка загрузки: " + urlJSON);
+                    console.error("Ошибка загрузки: " + urlJSON);
                 }
             }
         };
@@ -107,7 +107,7 @@ function MoonrainPlayer(selector) {
 
     // Функция перебора элементов подходящих под требования
     function start(){
-        console.log('старт запстился, селектор '+ selector, this);
+       // console.info('старт запстился, селектор '+ selector, this);
         Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
             return element.dataset.status === undefined;
         }).forEach(function(element, i, array){
@@ -124,7 +124,7 @@ function MoonrainPlayer(selector) {
                     dataActiveCount = index;
                 }
             });
-            console.log("Сравнение: ", document.querySelectorAll(selector).length - 1, dataActiveCount);
+            //console.info("Сравнение: ", document.querySelectorAll(selector).length - 1, dataActiveCount);
             if (document.querySelectorAll(selector).length - 1 == dataActiveCount){
                 clearTimeout(timeOut);
             }
@@ -164,20 +164,44 @@ function MoonrainPlayer(selector) {
 
         var element = {};
         element.html = HTMLElement;
-
-        element.html.appendChild(createPlayer());
+        element.media = [];
+        element.users = [];
 
         mediaObject.push(element);
 
-        videoObjects = [];
+        /*videoObjects = [];
         audioObjects = [];
-        mediaObjects = {};
+        mediaObjects = {};*/
 
-        var jsonObject = jsonTest(HTMLElement);
+        var JSONObject = getObjectJSON("https://crossorigin.me/" + element.html.dataset.src + "metadata.json");
 
-        for (var i in jsonObject.video){
+       // console.log(JSONObject);
+
+        var media = JSONObject.video.concat(JSONObject.audio);
+
+        media.forEach(function(el){
+            if(el.filename !== undefined){
+                if(!element.users.includes(el.endpointId)) element.users.push(el.endpointId);
+                var mediaElement = {};
+                mediaElement.tagName = el.mediaType;
+                mediaElement.filename = el.filename;
+                mediaElement.src = element.html.dataset.src;
+                if(el.mediaType == "audio") mediaElement.type = "audio/mp3";
+                if(el.mediaType == "video") mediaElement.type = "video/webm";
+                mediaElement.user = el.endpointId;
+                mediaElement.instant = el.instant;
+                element.media.push(mediaElement);
+            }       
+        });
+
+       console.log(element);
+
+        element.html.appendChild(createPlayer(element));
+
+
+
+     /*  for (var i in jsonObject.video){
             if(jsonObject.video[i].filename !== undefined){
-                /*console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");*/
                 var video = createMediaElement("video", jsonObject.video[i].filename, HTMLElement.dataset.src, 'video/webM');
                 HTMLElement.appendChild(video);
                 videoObjects[i] = video;
@@ -186,11 +210,13 @@ function MoonrainPlayer(selector) {
                 mediaObjects[id].type = "video";
             }
         }
+
         videoObjects.forEach(function(element){
             element.addEventListener("loadedmetadata", function(){
-                console.log("video: ", element.duration);
+                console.log("video: ", element, element.duration);
             });
         });
+
         for (var i in jsonObject.audio){
             if(jsonObject.audio[i].filename !== undefined){
                 var audio = createMediaElement("audio", jsonObject.audio[i].filename, element.html.dataset.src, 'audio/mp3');
@@ -198,24 +224,21 @@ function MoonrainPlayer(selector) {
                 audioObjects[i] = audio;
             }
         }
+
         audioObjects.forEach(function(element, index, object){
 
             element.addEventListener("loadedmetadata", function(){
-            //console.log("audio: ", element.readyState);
-            console.log("audio: "); //, element.duration);
-            console.log(index);
-            //object.splice(index, 1);
+            console.log("audio: ",  element, element.duration);
+
             });
-       	});
+       	});*/
     }
 
 
 
 
 
-    function createPlayer(){
-
-        var temp_elements = [1, 1, 1, 1, 1];
+    function createPlayer(el){
 
         var blockMedia = createElement("div", false, "player", false, false);
         var video = createElement("div", false, false, false, false);
@@ -223,12 +246,12 @@ function MoonrainPlayer(selector) {
         var blockControls = createElement("div", false, "bottom", false, false);
         var progress = createElement("div", false, "progress", false, false);
 
-        for (var element in temp_elements){
+        for (var user in el.users){
             var timeline = createElement("div", false, false, false, false);
             var timelineVideo = createElement("div", false, "progress-video", false, false);
             var progressViewed = createElement("div", false, "progress-viewed", false, false);
             progressViewed.classList.add("progress-inactive");
-    		timelineVideo.appendChild(progressViewed);
+            timelineVideo.appendChild(progressViewed);
             var timelineAudio = createElement("div", false, "progress-audio", false, false);
             timeline.appendChildren(timelineVideo, timelineAudio);
             progress.appendChild(timeline);
@@ -276,6 +299,17 @@ function MoonrainPlayer(selector) {
         blockControls.appendChildren(progress, controls);
 
         var blockHide = createElement("div", false, "hide-videos", false, false);
+                
+       
+        el.media.forEach(function(element, index){
+            var HTMLElement = createMediaElement(element.tagName, element.filename, element.src, element.type);
+            blockHide.appendChild(HTMLElement);
+            HTMLElement.addEventListener("loadedmetadata", function(){
+
+                console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
+            
+            });
+        });
 
         blockMedia.appendChildren(video, blockControls, blockHide);
 
