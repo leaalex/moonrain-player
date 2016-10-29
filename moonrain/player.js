@@ -3,9 +3,10 @@ function MoonrainPlayer(selector) {
 // TODO: this.default = {};
     // Переменные
     var key = genID("key");
-    var mediaObject = {};
+    var mediaObject = [];
     var timeOut;
     var selectorDefault = ".moonrainplayer";
+    
 
     // Препроверки
     if(selector === undefined){
@@ -159,21 +160,26 @@ function MoonrainPlayer(selector) {
 
 
 
-    function constructor(element){
-        element.appendChild(createPlayer());
-        mediaObject[genID()] = element;
+    function constructor(HTMLElement){
+
+        var element = {};
+        element.html = HTMLElement;
+
+        element.html.appendChild(createPlayer());
+
+        mediaObject.push(element);
 
         videoObjects = [];
         audioObjects = [];
         mediaObjects = {};
 
-        var jsonObject = jsonTest(element);
+        var jsonObject = jsonTest(HTMLElement);
 
         for (var i in jsonObject.video){
             if(jsonObject.video[i].filename !== undefined){
                 /*console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");*/
-                var video = createMediaElement("video", jsonObject.video[i].filename, element.dataset.src);
-                element.appendChild(video);
+                var video = createMediaElement("video", jsonObject.video[i].filename, HTMLElement.dataset.src);
+                HTMLElement.appendChild(video);
                 videoObjects[i] = video;
                 var id  = genID();
                 mediaObjects[id] = video;
