@@ -196,6 +196,8 @@ function MoonrainPlayer(selector) {
 
 
     function createPlayer(el){
+        var users = {};
+        var timelines = {};
 
         var blockMedia = createElement("div", false, "player", false, false);
         var video = createElement("video", false, false, false, false);
@@ -207,14 +209,15 @@ function MoonrainPlayer(selector) {
         var progress = createElement("div", false, "progress", false, false);
 
         for (var user in el.users){
-            var timeline = createElement("div", false, false, false, false);
+
+            timelines[el.users[user]] = createElement("div", false, false, false, false);
             var timelineVideo = createElement("div", false, "progress-video", false, false);
             var progressViewed = createElement("div", false, "progress-viewed", false, false);
             progressViewed.classList.add("progress-inactive");
             timelineVideo.appendChild(progressViewed);
             var timelineAudio = createElement("div", false, "progress-audio", false, false);
-            timeline.appendChildren(timelineVideo, timelineAudio);
-            progress.appendChild(timeline);
+            timelines[el.users[user]].appendChildren(timelineVideo, timelineAudio);
+            progress.appendChild(timelines[el.users[user]]);
         }
 
         var scrubber = createElement("div", false, "scrubber", false, false);
@@ -269,7 +272,7 @@ function MoonrainPlayer(selector) {
         blockControls.appendChildren(progress, controls);
 
         var blockHide = createElement("div", false, "hide-videos", false, false);
-        var users = {};
+
         el.users.forEach(function(element, index){
             users[element] = createElement("div", false, element, false, false);
             blockHide.appendChild(users[element]);
@@ -280,16 +283,23 @@ function MoonrainPlayer(selector) {
         el.media.forEach(function(element, index){
             var HTMLElement = createMediaElement(element.tagName, element.filename, element.src, element.type);
             blockHide.appendChild(HTMLElement);
-         
+
             HTMLElement.addEventListener("loadedmetadata", function(){
                 users[element.user].appendChild(this);
                 console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
+
             });
 
 
             if(element.tagName == "video"){
-                source.src = element.src + element.filename;
-                console.log(source.src);       
+                console.log(timelines);
+
+            
+                timelines[element.user].addEventListener("click", function(){
+                video.src = element.src + element.filename;
+                console.log(timelines[element.user],source);
+                });
+
             }
         });
 
