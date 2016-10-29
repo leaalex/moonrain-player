@@ -169,14 +169,7 @@ function MoonrainPlayer(selector) {
 
         mediaObject.push(element);
 
-        /*videoObjects = [];
-        audioObjects = [];
-        mediaObjects = {};*/
-
         var JSONObject = getObjectJSON("https://crossorigin.me/" + element.html.dataset.src + "metadata.json");
-
-       // console.log(JSONObject);
-
         var media = JSONObject.video.concat(JSONObject.audio);
 
         media.forEach(function(el){
@@ -195,43 +188,7 @@ function MoonrainPlayer(selector) {
         });
 
        console.log(element);
-
         element.html.appendChild(createPlayer(element));
-
-
-
-     /*  for (var i in jsonObject.video){
-            if(jsonObject.video[i].filename !== undefined){
-                var video = createMediaElement("video", jsonObject.video[i].filename, HTMLElement.dataset.src, 'video/webM');
-                HTMLElement.appendChild(video);
-                videoObjects[i] = video;
-                var id  = genID();
-                mediaObjects[id] = video;
-                mediaObjects[id].type = "video";
-            }
-        }
-
-        videoObjects.forEach(function(element){
-            element.addEventListener("loadedmetadata", function(){
-                console.log("video: ", element, element.duration);
-            });
-        });
-
-        for (var i in jsonObject.audio){
-            if(jsonObject.audio[i].filename !== undefined){
-                var audio = createMediaElement("audio", jsonObject.audio[i].filename, element.html.dataset.src, 'audio/mp3');
-                element.html.appendChild(audio);
-                audioObjects[i] = audio;
-            }
-        }
-
-        audioObjects.forEach(function(element, index, object){
-
-            element.addEventListener("loadedmetadata", function(){
-            console.log("audio: ",  element, element.duration);
-
-            });
-       	});*/
     }
 
 
@@ -241,7 +198,10 @@ function MoonrainPlayer(selector) {
     function createPlayer(el){
 
         var blockMedia = createElement("div", false, "player", false, false);
-        var video = createElement("div", false, false, false, false);
+        var video = createElement("video", false, false, false, false);
+
+        var source = createElement("source", false, false, false, false);
+        video.appendChild(source);
 
         var blockControls = createElement("div", false, "bottom", false, false);
         var progress = createElement("div", false, "progress", false, false);
@@ -271,8 +231,18 @@ function MoonrainPlayer(selector) {
 
         buttonPlayPause.innerHTML = '<svg class="play-image active" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><path fill="white" d="M 12,26 18.5,22 18.5,14 12,10 z M 18.5,22 25,18 25,18 18.5,14 z"></path></svg><svg class="pause-image" height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><path fill="white" d="M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z"></path></svg>';
 
-        var buttonStop = createElement("div", false,  "control-button", false, false);
-        buttonStop.innerHTML = '';
+
+        buttonPlayPause.addEventListener('click', function(){
+
+            this.querySelector(".play-image").classList.toggle('active');
+            this.querySelector(".pause-image").classList.toggle('active');
+            /*console.log(video);*/
+            (video.paused) ? video.play() : video.pause();
+        });
+
+
+       /* var buttonStop = createElement("div", false,  "control-button", false, false);
+        buttonStop.innerHTML = '';*/
 
         var buttonPrev = createElement("div", false, "control-button", false, false);
         buttonPrev.innerHTML = '<svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><path fill="white" d="m 12,12 h 2 v 12 h -2 z m 3.5,6 8.5,6 V 12 z"></path></svg>';
@@ -292,8 +262,8 @@ function MoonrainPlayer(selector) {
         var buttonFullscreen = createElement("div", false, "control-button", false, false);
         buttonFullscreen.innerHTML = '<svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><g><path fill="white" class="ytp-svg-fill" d="m 10,16 2,0 0,-4 4,0 0,-2 L 10,10 l 0,6 0,0 z"></path></g><g><path fill="white" class="ytp-svg-fill" d="m 20,10 0,2 4,0 0,4 2,0 L 26,10 l -6,0 0,0 z"></path></g><g><path fill="white" class="ytp-svg-fill" d="m 24,24 -4,0 0,2 L 26,26 l 0,-6 -2,0 0,4 0,0 z"></path></g><g><path fill="white" class="ytp-svg-fill" d="M 12,20 10,20 10,26 l 6,0 0,-2 -4,0 0,-4 0,0 z"></path></g></svg>';
 
-    	leftControls.appendChildren(buttonPlayPause, buttonStop, buttonPrev, buttonNext, buttonVolume, timer);
-    	rightControls.appendChildren(buttonSettings, buttonFullscreen);
+        leftControls.appendChildren(buttonPlayPause, /*buttonStop,*/ buttonPrev, buttonNext, buttonVolume, timer);
+        rightControls.appendChildren(buttonSettings, buttonFullscreen);
 
         controls.appendChildren(leftControls, rightControls);
         blockControls.appendChildren(progress, controls);
@@ -303,17 +273,24 @@ function MoonrainPlayer(selector) {
         el.users.forEach(function(element, index){
             users[element] = createElement("div", false, element, false, false);
             blockHide.appendChild(users[element]);
+            //console.log(element);
         })
 
 
         el.media.forEach(function(element, index){
             var HTMLElement = createMediaElement(element.tagName, element.filename, element.src, element.type);
             blockHide.appendChild(HTMLElement);
+         
             HTMLElement.addEventListener("loadedmetadata", function(){
                 users[element.user].appendChild(this);
                 console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
-
             });
+
+
+            if(element.tagName == "video"){
+                source.src = element.src + element.filename;
+                console.log(source.src);       
+            }
         });
 
         blockMedia.appendChildren(video, blockControls, blockHide);
