@@ -200,10 +200,14 @@ function MoonrainPlayer(selector) {
         var timelines = {};
 
         var blockMedia = createElement("div", false, "player", false, false);
-        var video = createElement("video", false, false, false, false);
 
-        var source = createElement("source", false, false, false, false);
-        video.appendChild(source);
+        var video = createElement("video", false, "videoMoonrainPlayer", false, false);
+        var sourceVideo = createElement("source", false, false, false, false);
+        video.appendChild(sourceVideo);
+
+        var audio = createElement("audio", false, "audioMoonrainPlayer", false, false);
+        var sourceAudio = createElement("source", false, false, false, false);
+        audio.appendChild(sourceAudio);
 
         var blockControls = createElement("div", false, "bottom", false, false);
         var progress = createElement("div", false, "progress", false, false);
@@ -241,6 +245,7 @@ function MoonrainPlayer(selector) {
             this.querySelector(".pause-image").classList.toggle('active');
             /*console.log(video);*/
             (video.paused) ? video.play() : video.pause();
+            (audio.paused) ? audio.play() : audio.pause();
         });
 
 
@@ -255,6 +260,9 @@ function MoonrainPlayer(selector) {
 
         var buttonVolume = createElement("div", false, "control-volume", false, false);
         buttonVolume.innerHTML = '<svg height="100%" version="1.1" viewBox="0 0 36 36"><path fill="white" d="M8,21 L12,21 L17,26 L17,10 L12,15 L8,15 L8,21 Z M19,14 L19,22 C20.48,21.32 21.5,19.77 21.5,18 C21.5,16.26 20.48,14.74 19,14 Z M19,11.29 C21.89,12.15 24,14.83 24,18 C24,21.17 21.89,23.85 19,24.71 L19,26.77 C23.01,25.86 26,22.28 26,18 C26,13.72 23.01,10.14 19,9.23 L19,11.29 Z"></path></svg>';
+
+        buttonVolumeInput = createElement("input", false, "volume-value", false, {type: "range"});
+        buttonVolume.appendChild(buttonVolumeInput);
 
         var timer = createElement("div", false, "control-timer", false, false);
         timer.innerHTML = '<span>23:12</span> <span>/</span> <span>10:56:02</span>';
@@ -291,19 +299,22 @@ function MoonrainPlayer(selector) {
             });
 
 
-            if(element.tagName == "video"){
-                console.log(timelines);
 
-            
-                timelines[element.user].addEventListener("click", function(){
-                video.src = element.src + element.filename;
-                console.log(timelines[element.user],source);
-                });
 
-            }
+            timelines[element.user].addEventListener("click", function(){
+                if(element.tagName == "video"){
+                    video.src = element.src + element.filename;
+                }
+                if(element.tagName == "audio"){
+                    audio.src = element.src + element.filename;
+                }
+            });
+
+
+
         });
 
-        blockMedia.appendChildren(video, blockControls, blockHide);
+        blockMedia.appendChildren(video, audio, blockControls, blockHide);
 
         return blockMedia;
     }

@@ -1,3 +1,10 @@
+.videoMoonrainPlayer{
+	height: 100%;
+	margin: 0 auto;
+	display: block;
+}
+
+
 	.hide-videos{
 		display: none;
 	}
@@ -109,7 +116,10 @@
 	.controls-right{
 		float: right;
 	}
-
+	.controls-left div,
+	.controls-right div{
+		margin: 0 2px;
+	}
 	.circle-button{
 		height: 24px;
     	background: beige;
