@@ -52,9 +52,9 @@ function MoonrainPlayer(selector) {
     }
 
     //Создание медиа-элемента
-    function createMediaElement(type, name, src){
+    function createMediaElement(tagName, name, src, type){
         var element = createElement(type, genID(type), 'class_' + type, false, {controls: true, preload: "auto"});
-        var source = createElement("source", false, false, false, {src: src + name, type: "video/webm"});
+        var source = createElement("source", false, false, false, {src: src + name, type: type});
         element.appendChild(source);
         return element;
     }
