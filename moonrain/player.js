@@ -6,7 +6,7 @@ function MoonrainPlayer(selector) {
     var mediaObject = [];
     var timeOut;
     var selectorDefault = ".moonrainplayer";
-    
+
 
     // Препроверки
     if(selector === undefined){
@@ -54,7 +54,7 @@ function MoonrainPlayer(selector) {
 
     //Создание медиа-элемента
     function createMediaElement(tagName, name, src, type){
-        var element = createElement(type, genID(type), 'class_' + type, false, {controls: true, preload: "auto"});
+        var element = createElement(tagName, genID(tagName), 'class_' + tagName, false, {controls: true, preload: "auto"});
         var source = createElement("source", false, false, false, {src: src + name, type: type});
         element.appendChild(source);
         return element;
@@ -178,7 +178,7 @@ function MoonrainPlayer(selector) {
         for (var i in jsonObject.video){
             if(jsonObject.video[i].filename !== undefined){
                 /*console.log("https://crossorigin.me/" + element.dataset.src + "metadata.json");*/
-                var video = createMediaElement("video", jsonObject.video[i].filename, HTMLElement.dataset.src);
+                var video = createMediaElement("video", jsonObject.video[i].filename, HTMLElement.dataset.src, 'video/webM');
                 HTMLElement.appendChild(video);
                 videoObjects[i] = video;
                 var id  = genID();
@@ -193,8 +193,8 @@ function MoonrainPlayer(selector) {
         });
         for (var i in jsonObject.audio){
             if(jsonObject.audio[i].filename !== undefined){
-                var audio = createMediaElement("audio", jsonObject.audio[i].filename, element.dataset.src);
-                element.appendChild(audio);
+                var audio = createMediaElement("audio", jsonObject.audio[i].filename, element.html.dataset.src, 'audio/mp3');
+                element.html.appendChild(audio);
                 audioObjects[i] = audio;
             }
         }
