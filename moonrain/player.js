@@ -1,31 +1,77 @@
+
 function MoonrainPlayer(selector) {
-// Переменные
+    // Переменные
+    var key = genID("key");    
     var mediaObject = {};
     var timeOut;
+    var selectorDefault = ".moonrainplayer"
 
+    // Препроверки
     if(selector === undefined){
-        selector = ".moonrainplayer";
+        selector = selectorDefault;
     }
 
+    // Вспомогательные функции:
+
+    //Генерация ID
     function genID(value) {
         value = value || "id";
         return value +"_" + Math.random().toString(16).substr(2, 8).toUpperCase();
     }
+
+    //Создание элемента html 
+    function createElement(tagName, id, classList, attributes, properties){
+        var element = document.createElement(tagName);
+        if (classList){
+            element.classList.add(classList);
+        }
+        if (id){
+            element.id = id;
+        }
+        if (attributes){
+            for(var attribute in attributes){
+                element.setAttribite(attribute, attributes[attribute]);
+            }
+        }
+        if (properties){
+            for (var propertiy in properties){
+                element[propertiy] =  properties[propertiy];
+            }
+        }
+        return element;
+    }
+
+    //Создание медиа-элемента
+    function createMediaElement(type, name, src){
+        var element = createElement(type, genID(type), 'class_' + type, false, {controls: true, preload: "auto"});
+        var source = createElement("source", false, false, false, {src: src + name, type: "video/webm"});
+        element.appendChild(source);
+        return element;
+    }
+
+
+
+
+
+
+
+
     // Функция перебора элементов подходящих под требования
     function start(){
         console.log('старт запстился, селектор '+ selector, this);
         Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
             return element.dataset.status === undefined;
-        }).forEach(function(element, i ,array){
+        }).forEach(function(element, i, array){
           //  console.log(element);
-            element.dataset.status = "activate";
+
+            element.dataset.status = key;
             constructor(element);
         });
 
         function checkStop(){
             var dataActiveCount = 0;
             document.querySelectorAll(selector).forEach(function(elem, index){
-                if (elem.dataset.status == "activate"){
+                if (elem.dataset.status == key){
                     dataActiveCount = index;
                 }
             });
@@ -37,15 +83,26 @@ function MoonrainPlayer(selector) {
 
         timeOut = setTimeout(function(){ 
             start(); 
-            checkStop(); 
+           /*checkStop();*/
         }, 1000);
     }
     //TODO: Функция проверки не запушена ли библиотека уже!
 
+    function check(){
+        if(Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
+            return element.dataset.status != undefined;
+        }).length){
+            console.info("Работает другая библиотека!");
+        }
+        else{
+            start();
+        }
 
+    }
 
     this.init = function(){
-        start();
+        check();
+        /*start();*/
         return mediaObject;
     };
 
@@ -116,7 +173,7 @@ function MoonrainPlayer(selector) {
 
     };
 
-
+this.init();
 }
 
 
@@ -126,38 +183,7 @@ function initialization(selector){
 
 }
 
-function createElement(tagName, id, classList, attributes, properties){
-    var element = document.createElement(tagName);
-    if (classList){
-        element.classList.add(classList);
-    }
-    if (id){
-        element.id = id;
-    }
-    if (attributes){
-        for(var attribute in attributes){
-            element.setAttribite(attribute, attributes[attribute]);
-        }
-    }
-    if (properties){
-        for (var propertiy in properties){
-            element[propertiy] =  properties[propertiy];
-        }
-    }
-    return element;
-}
 
-function genID(value){
-    var value = value+"_" || "id";
-        return value + Math.random().toString(16).substr(2, 8).toUpperCase();
-}
-
-function createMediaElement(type, name, src){
-    var element = createElement(type, genID(type), 'class_'+type, false, {controls:true, preload:"auto"});
-    var source = createElement("source", false, false, false, {src:src + name, type: "video/webm"});
-    element.appendChild(source);
-    return element;
-}
 
 function append(element, array){
 
