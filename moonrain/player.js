@@ -191,7 +191,7 @@ function MoonrainPlayer(selector) {
                 mediaElement.user = el.endpointId;
                 mediaElement.instant = el.instant;
                 element.media.push(mediaElement);
-            }       
+            }
         });
 
        console.log(element);
@@ -299,15 +299,20 @@ function MoonrainPlayer(selector) {
         blockControls.appendChildren(progress, controls);
 
         var blockHide = createElement("div", false, "hide-videos", false, false);
-                
-       
+        var users = {};
+        el.users.forEach(function(element, index){
+            users[element] = createElement("div", false, element, false, false);
+            blockHide.appendChild(users[element]);
+        })
+
+
         el.media.forEach(function(element, index){
             var HTMLElement = createMediaElement(element.tagName, element.filename, element.src, element.type);
             blockHide.appendChild(HTMLElement);
             HTMLElement.addEventListener("loadedmetadata", function(){
-
+                users[element.user].appendChild(this);
                 console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
-            
+
             });
         });
 
