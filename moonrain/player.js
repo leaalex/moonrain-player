@@ -33,11 +33,12 @@ function MoonrainPlayer(selector) {
     //Создание элемента html
     function createElement(tagName, id, classList, attributes, properties){
         var element = document.createElement(tagName);
-        if (classList){
-            element.classList.add(classList);
-        }
         if (id){
             element.id = id;
+        }
+        //TODO: Написать функцию которая сможет при сождании элемента добовлять несколько классов
+        if (classList){
+            element.classList.add(classList);
         }
         if (attributes){
             for(var attribute in attributes){
@@ -83,10 +84,6 @@ function MoonrainPlayer(selector) {
     // +++++++++++++++++
     // Временные функции
     // +++++++++++++++++
-    function jsonTest(element){
-        var objectJSON = getObjectJSON("https://crossorigin.me/" + element.dataset.src + "metadata.json");
-        return objectJSON;
-    }
 
 
 
@@ -94,11 +91,12 @@ function MoonrainPlayer(selector) {
     // Основные функции
 
     // Функция проверки запущен ли другой экзкмнляр библиотеки
+    // Если другого экземпляра не запущено то запускает функцию start()
     function check(){
         if(Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
             return element.dataset.status !== undefined;
         }).length){
-            console.info("Работает другая библиотека!");
+            console.warn("Работает другая библиотека!");
         }
         else{
             start();
@@ -108,13 +106,13 @@ function MoonrainPlayer(selector) {
     // Функция перебора элементов подходящих под требования
     function start(){
        // console.info('старт запстился, селектор '+ selector, this);
-        Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
-            return element.dataset.status === undefined;
-        }).forEach(function(element, i, array){
+        Array.prototype.filter.call(document.querySelectorAll(selector), function(HTMLElement){
+            return HTMLElement.dataset.status === undefined;
+        }).forEach(function(HTMLElement, i, array){
           //  console.log(element);
 
-            element.dataset.status = key;
-            constructor(element);
+            HTMLElement.dataset.status = key;
+            constructor(HTMLElement);
         });
 
         function checkStop(){
@@ -135,11 +133,6 @@ function MoonrainPlayer(selector) {
            /*checkStop();*/
         }, 1000);
     }
-//TODO: Функция проверки не запушена ли библиотека уже!
-
-
-
-
 
 
     // Основные методы
@@ -150,14 +143,6 @@ function MoonrainPlayer(selector) {
         /*start();*/
         return mediaObject;
     };
-
-
-
-
-
-
-
-
 
 
     function constructor(HTMLElement){
@@ -197,7 +182,7 @@ function MoonrainPlayer(selector) {
 
     function createPlayer(el){
         var users = {};
-        var timelines = {};
+        el.timelines = {};
 
         var blockMedia = createElement("div", false, "player", false, false);
 
@@ -213,15 +198,16 @@ function MoonrainPlayer(selector) {
         var progress = createElement("div", false, "progress", false, false);
 
         for (var user in el.users){
-
-            timelines[el.users[user]] = createElement("div", false, false, false, false);
-            var timelineVideo = createElement("div", false, "progress-video", false, false);
-            var progressViewed = createElement("div", false, "progress-viewed", false, false);
-            progressViewed.classList.add("progress-inactive");
-            timelineVideo.appendChild(progressViewed);
-            var timelineAudio = createElement("div", false, "progress-audio", false, false);
-            timelines[el.users[user]].appendChildren(timelineVideo, timelineAudio);
-            progress.appendChild(timelines[el.users[user]]);
+            var timeline = {};
+            timeline.body = createElement("div", false, false, false, false);
+            timeline.video = createElement("div", false, "progress-video", false, false);
+            timeline.progressViewed = createElement("div", false, "progress-viewed", false, false);
+            timeline.progressViewed.classList.add("progress-inactive");
+            timeline.video.appendChild(timeline.progressViewed);
+            timeline.audio = createElement("div", false, "progress-audio", false, false);
+            timeline.body.appendChildren(timeline.video, timeline.audio);
+            progress.appendChild(timeline.body);
+            el.timelines[el.users[user]] = timeline;
         }
 
         var scrubber = createElement("div", false, "scrubber", false, false);
@@ -285,9 +271,7 @@ function MoonrainPlayer(selector) {
             users[element] = createElement("div", false, element, false, false);
             blockHide.appendChild(users[element]);
             //console.log(element);
-        })
-
-
+        });
         el.media.forEach(function(element, index){
             var HTMLElement = createMediaElement(element.tagName, element.filename, element.src, element.type);
             blockHide.appendChild(HTMLElement);
@@ -297,11 +281,7 @@ function MoonrainPlayer(selector) {
                 console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
 
             });
-
-
-
-
-            timelines[element.user].addEventListener("click", function(){
+            el.timelines[element.user].body.addEventListener("click", function(){
                 if(element.tagName == "video"){
                     video.src = element.src + element.filename;
                 }
@@ -309,12 +289,11 @@ function MoonrainPlayer(selector) {
                     audio.src = element.src + element.filename;
                 }
             });
-
-
-
         });
-
         blockMedia.appendChildren(video, audio, blockControls, blockHide);
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
         return blockMedia;
     }
