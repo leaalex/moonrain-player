@@ -4,7 +4,6 @@ function MoonrainPlayer(selector) {
     // Переменные
     var key = genID("key");
     var mediaObject = [];
-    var timeOut;
     var selectorDefault = ".moonrainplayer";
 
 
@@ -84,7 +83,18 @@ function MoonrainPlayer(selector) {
     // +++++++++++++++++
     // Временные функции
     // +++++++++++++++++
-
+    function checkStop(){
+        var dataActiveCount = 0;
+        document.querySelectorAll(selector).forEach(function(elem, index){
+            if (elem.dataset.status == key){
+                dataActiveCount = index;
+            }
+        });
+        //console.info("Сравнение: ", document.querySelectorAll(selector).length - 1, dataActiveCount);
+        if (document.querySelectorAll(selector).length - 1 == dataActiveCount){
+            clearTimeout(timeOut);
+        }
+    }
 
 
 
@@ -92,19 +102,19 @@ function MoonrainPlayer(selector) {
 
     // Функция проверки запущен ли другой экзкмнляр библиотеки
     // Если другого экземпляра не запущено то запускает функцию start()
-    function check(){
+    function check(selector){
         if(Array.prototype.filter.call(document.querySelectorAll(selector), function(element){
             return element.dataset.status !== undefined;
         }).length){
             console.warn("Работает другая библиотека!");
         }
         else{
-            start();
+            start(selector);
         }
     }
 
     // Функция перебора элементов подходящих под требования
-    function start(){
+    function start(selector){
        // console.info('старт запстился, селектор '+ selector, this);
         Array.prototype.filter.call(document.querySelectorAll(selector), function(HTMLElement){
             return HTMLElement.dataset.status === undefined;
@@ -115,22 +125,10 @@ function MoonrainPlayer(selector) {
             constructor(HTMLElement);
         });
 
-        function checkStop(){
-            var dataActiveCount = 0;
-            document.querySelectorAll(selector).forEach(function(elem, index){
-                if (elem.dataset.status == key){
-                    dataActiveCount = index;
-                }
-            });
-            //console.info("Сравнение: ", document.querySelectorAll(selector).length - 1, dataActiveCount);
-            if (document.querySelectorAll(selector).length - 1 == dataActiveCount){
-                clearTimeout(timeOut);
-            }
-        }
 
-        timeOut = setTimeout(function(){
-            start();
-           /*checkStop();*/
+
+        setTimeout(function(){
+            start(selector);
         }, 1000);
     }
 
@@ -139,7 +137,7 @@ function MoonrainPlayer(selector) {
 
     // Инициализация библиотеки и возращене медиаобъектов
     this.init = function(){
-        check();
+        check(selector);
         /*start();*/
         return mediaObject;
     };
@@ -293,6 +291,67 @@ function MoonrainPlayer(selector) {
         blockMedia.appendChildren(video, audio, blockControls, blockHide);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+var moveListener = function(e){
+    document.body.style.cursor = "pointer";
+    var mouseX = e.clientX - 19;
+
+    if(mouseX >= 0 && mouseX <= 830){
+        scrubber.style.transform = "translateX(" + mouseX + "px)";
+        for(var name in el.timelines){
+            el.timelines[name].progressViewed.style.width = mouseX + "px";
+        }
+    }
+    else if(mouseX < 0){
+        mouseX = 0;
+        scrubber.style.transform = "translateX(" + mouseX + "px)";
+        for(var name in el.timelines){
+            el.timelines[name].progressViewed.style.width = mouseX + "px";
+        }
+    }
+    else if(mouseX > 830){
+        mouseX = 830;
+        scrubber.style.transform = "translateX(" + mouseX + "px)";
+        for(var name in el.timelines){
+            el.timelines[name].progressViewed.style.width = mouseX + "px";
+        }
+    }
+};
+
+        progress.addEventListener('mousedown', function(e){
+            moveListener(e);
+            document.addEventListener('mousemove', moveListener,  false);
+        }, false);
+
+        scrubber.addEventListener('mousedown', function(e) {
+            moveListener(e);
+            document.addEventListener('mousemove', moveListener,  false);
+        }, false);
+
+        document.addEventListener('mouseup', function(e) {
+            document.body.style.cursor = "auto";
+            document.removeEventListener('mousemove', moveListener,  false);
+        }, false);
+
+
+
+
+        for(var name in el.timelines){
+
+            el.timelines[name].video.addEventListener('mousedown', function() {
+
+                el.timelines[name].progressViewed.classList.remove("progress-inactive");
+                el.timelines[name].progressViewed.classList.add("progress-active");
+                scrubber.style.top = i * 14 - 2 + "px";
+
+            });
+
+        }
+
+
+
+
+
 
 
         return blockMedia;
