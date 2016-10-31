@@ -279,7 +279,7 @@ function MoonrainPlayer(selector) {
                 console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
 
             });
-            el.timelines[element.user].body.addEventListener("click", function(){
+            el.timelines[element.user].body.addEventListener("mousedown", function(){
                 if(element.tagName == "video"){
                     video.src = element.src + element.filename;
                 }
@@ -337,15 +337,19 @@ var moveListener = function(e){
 
 
         for(var name in el.timelines){
-
-            el.timelines[name].video.addEventListener('mousedown', function() {
-
-                el.timelines[name].progressViewed.classList.remove("progress-inactive");
-                el.timelines[name].progressViewed.classList.add("progress-active");
-                scrubber.style.top = i * 14 - 2 + "px";
-
-            });
-
+            (function(name){
+                el.timelines[name].video.addEventListener('mousedown', function() {
+                console.log(name)
+                    el.timelines[name].progressViewed.classList.remove("progress-inactive");
+                    el.timelines[name].progressViewed.classList.add("progress-active");
+                    for(var anothername in el.timelines){
+                        if(anothername !==name){
+                            el.timelines[anothername].progressViewed.classList.remove("progress-active");
+                            el.timelines[anothername].progressViewed.classList.add("progress-inactive");
+                        }
+                    }
+                });
+            })(name);
         }
 
 
