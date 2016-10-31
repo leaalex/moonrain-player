@@ -12,7 +12,8 @@
 	.player{
 	    width: 854px;
 	    height: 600px;
-	    background: url(sierra-2.jpg);
+	   /* background: url(sierra-2.jpg);*/
+	    background-color: black;
 	    position: relative;
 	    background-size: cover;
 	}
@@ -91,7 +92,8 @@
 	}
 
 	.volume-value{
-		display: none;
+		/*display: none;*/
+		display: inline-block;
 		top: -6px;
 	    position: relative;
 	    width: 72px;

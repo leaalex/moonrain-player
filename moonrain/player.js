@@ -185,10 +185,14 @@ function MoonrainPlayer(selector) {
         var blockMedia = createElement("div", false, "player", false, false);
 
         var video = createElement("video", false, "videoMoonrainPlayer", false, false);
+        video.currentDuration = 0;
+        video.first = 0;
         var sourceVideo = createElement("source", false, false, false, false);
         video.appendChild(sourceVideo);
 
         var audio = createElement("audio", false, "audioMoonrainPlayer", false, false);
+        audio.currentDuration = 0;
+        audio.first = 0;
         var sourceAudio = createElement("source", false, false, false, false);
         audio.appendChild(sourceAudio);
 
@@ -212,6 +216,9 @@ function MoonrainPlayer(selector) {
         scrubber.innerHTML = '<div class="scrubber-circle"></div>';
         progress.appendChild(scrubber);
 
+        scrubber.ondragstart = function() {
+            return false;
+        };
 
         var controls = createElement("div", false, "controls", false, false);
         var leftControls = createElement("div", false, "controls-left", false, false);
@@ -227,25 +234,28 @@ function MoonrainPlayer(selector) {
 
             this.querySelector(".play-image").classList.toggle('active');
             this.querySelector(".pause-image").classList.toggle('active');
-            /*console.log(video);*/
-            (video.paused) ? video.play() : video.pause();
-            (audio.paused) ? audio.play() : audio.pause();
+            
+            if(video.paused){
+                    video.play(); 
+                    audio.play() 
+                } else{ video.pause(); audio.pause();}
+            //(audio.paused) ? audio.play() : audio.pause();
         });
 
 
        /* var buttonStop = createElement("div", false,  "control-button", false, false);
         buttonStop.innerHTML = '';*/
 
-        var buttonPrev = createElement("div", false, "control-button", false, false);
+        var buttonPrev = createElement("div", false, "control-button", false,  {hidden: "hidden"});
         buttonPrev.innerHTML = '<svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><path fill="white" d="m 12,12 h 2 v 12 h -2 z m 3.5,6 8.5,6 V 12 z"></path></svg>';
 
-        var buttonNext = createElement("div", false, "control-button", false, false);
+        var buttonNext = createElement("div", false, "control-button", false, {hidden: "hidden"});
         buttonNext.innerHTML = '<svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><path fill="white" d="M 12,24 20.5,18 12,12 V 24 z M 22,12 v 12 h 2 V 12 h -2 z"></path></svg>';
 
         var buttonVolume = createElement("div", false, "control-volume", false, false);
         buttonVolume.innerHTML = '<svg height="100%" version="1.1" viewBox="0 0 36 36"><path fill="white" d="M8,21 L12,21 L17,26 L17,10 L12,15 L8,15 L8,21 Z M19,14 L19,22 C20.48,21.32 21.5,19.77 21.5,18 C21.5,16.26 20.48,14.74 19,14 Z M19,11.29 C21.89,12.15 24,14.83 24,18 C24,21.17 21.89,23.85 19,24.71 L19,26.77 C23.01,25.86 26,22.28 26,18 C26,13.72 23.01,10.14 19,9.23 L19,11.29 Z"></path></svg>';
 
-        buttonVolumeInput = createElement("input", false, "volume-value", false, {type: "range"});
+        buttonVolumeInput = createElement("input", false, "volume-value", false, {type: "range", min: "0", max: "1", step: "0.01"});
         buttonVolume.appendChild(buttonVolumeInput);
 
         var timer = createElement("div", false, "control-timer", false, false);
@@ -270,6 +280,8 @@ function MoonrainPlayer(selector) {
             blockHide.appendChild(users[element]);
             //console.log(element);
         });
+
+
         el.media.forEach(function(element, index){
             var HTMLElement = createMediaElement(element.tagName, element.filename, element.src, element.type);
             blockHide.appendChild(HTMLElement);
@@ -277,46 +289,88 @@ function MoonrainPlayer(selector) {
             HTMLElement.addEventListener("loadedmetadata", function(){
                 users[element.user].appendChild(this);
                 console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
+                element.duration = HTMLElement.duration;
+            
+            
+            if(element.tagName == "video"){
+               // console.log(video.first);
+                if(video.first == 0){
+                    video.first = element.instant;
+                    video.src = element.src + element.filename; 
+                    video.currentDuration = element.duration;   
+                }    
+
+                if (video.first > element.instant){
+                    console.warn("video.src", video.src, element.instant);
+                    video.src = element.src + element.filename; 
+                    video.currentDuration = element.duration;                     
+                }
+            }
+
+            if(element.tagName == "audio"){
+               // console.log(audio.first);
+                if(audio.first == 0){
+                    audio.first = element.instant;
+                    audio.src = element.src + element.filename; 
+                    audio.currentDuration = element.duration;   
+                }    
+                if (audio.first > element.instant){
+                    console.warn("audio.src", audio.src, element.instant);
+                    audio.src = element.src + element.filename; 
+                    audio.currentDuration = element.duration;                     
+                }
+            }
 
             });
+
+
             el.timelines[element.user].body.addEventListener("mousedown", function(){
                 if(element.tagName == "video"){
-                    video.src = element.src + element.filename;
+                    if(video.src !== element.src + element.filename){
+                        video.src = element.src + element.filename;
+                        video.currentDuration = element.duration;
+                    }
                 }
                 if(element.tagName == "audio"){
-                    audio.src = element.src + element.filename;
+                    if(audio.src !== element.src + element.filename){
+                        audio.src = element.src + element.filename;
+                        audio.currentDuration = element.duration;
+                    }
                 }
             });
+        
+
+
+
         });
+
+
         blockMedia.appendChildren(video, audio, blockControls, blockHide);
+        
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-var moveListener = function(e){
-    document.body.style.cursor = "pointer";
-    var mouseX = e.clientX - 19;
 
-    if(mouseX >= 0 && mouseX <= 830){
-        scrubber.style.transform = "translateX(" + mouseX + "px)";
-        for(var name in el.timelines){
-            el.timelines[name].progressViewed.style.width = mouseX + "px";
-        }
-    }
-    else if(mouseX < 0){
-        mouseX = 0;
-        scrubber.style.transform = "translateX(" + mouseX + "px)";
-        for(var name in el.timelines){
-            el.timelines[name].progressViewed.style.width = mouseX + "px";
-        }
-    }
-    else if(mouseX > 830){
-        mouseX = 830;
-        scrubber.style.transform = "translateX(" + mouseX + "px)";
-        for(var name in el.timelines){
-            el.timelines[name].progressViewed.style.width = mouseX + "px";
-        }
-    }
-};
+
+        var moveListener = function(e){
+            document.body.style.cursor = "pointer";
+            var mouseX;
+            (e.clientX - 19 < 0) ? mouseX = 0: (e.clientX - 19 > 830) ? mouseX = 830: mouseX = e.clientX - 19;
+            
+            scrubber.style.transform = "translateX(" + mouseX + "px)";
+            
+            for(var name in el.timelines){
+                el.timelines[name].progressViewed.style.width = mouseX + "px";
+            }
+
+            console.log("video.currentTime", video.currentDuration * (mouseX/830));
+            console.log("audio.currentTime", audio.currentDuration * (mouseX/830));
+            
+            video.currentTime = audio.currentDuration * (mouseX/830); 
+            audio.currentTime = audio.currentDuration * (mouseX/830); 
+            
+            /*audio.currentTime = audio.duration/830 * mouseX;*/
+        };
 
         progress.addEventListener('mousedown', function(e){
             moveListener(e);
@@ -331,15 +385,22 @@ var moveListener = function(e){
         document.addEventListener('mouseup', function(e) {
             document.body.style.cursor = "auto";
             document.removeEventListener('mousemove', moveListener,  false);
+
+            console.log("UP!");
+
         }, false);
 
-
+        buttonVolumeInput.addEventListener('input', function()
+        {
+            audio.volume = this.value;
+            console.log(audio.volume);
+        });
 
 
         for(var name in el.timelines){
             (function(name){
                 el.timelines[name].video.addEventListener('mousedown', function() {
-                console.log(name)
+                var i = [].slice.call(progress.childNodes).indexOf(el.timelines[name].body);
                     el.timelines[name].progressViewed.classList.remove("progress-inactive");
                     el.timelines[name].progressViewed.classList.add("progress-active");
                     for(var anothername in el.timelines){
@@ -348,15 +409,11 @@ var moveListener = function(e){
                             el.timelines[anothername].progressViewed.classList.add("progress-inactive");
                         }
                     }
+                    progress.querySelector(".scrubber-circle").style.top = i * 14 - 2 + "px";
+
                 });
             })(name);
         }
-
-
-
-
-
-
 
         return blockMedia;
     }
