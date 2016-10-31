@@ -356,7 +356,7 @@ function MoonrainPlayer(selector) {
             document.body.style.cursor = "pointer";
             var mouseX;
             (e.clientX - 19 < 0) ? mouseX = 0: (e.clientX - 19 > 830) ? mouseX = 830: mouseX = e.clientX - 19;
-            
+
             scrubber.style.transform = "translateX(" + mouseX + "px)";
             
             for(var name in el.timelines){
@@ -394,6 +394,10 @@ function MoonrainPlayer(selector) {
         {
             audio.volume = this.value;
             console.log(audio.volume);
+        });
+
+        buttonFullscreen.addEventListener('click', function(e) {
+            console.log("OK!", video);
         });
 
 
