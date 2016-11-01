@@ -149,6 +149,7 @@ function MoonrainPlayer(selector) {
         element.html = HTMLElement;
         element.media = [];
         element.users = [];
+        element.speakerChange = []
 
         mediaObject.push(element);
 
@@ -167,6 +168,9 @@ function MoonrainPlayer(selector) {
                 mediaElement.user = el.endpointId;
                 mediaElement.instant = el.instant;
                 element.media.push(mediaElement);
+            }
+            else{
+                element.speakerChange.push(el)
             }
         });
 
@@ -210,7 +214,10 @@ function MoonrainPlayer(selector) {
             timeline.body.appendChildren(timeline.video, timeline.audio);
             progress.appendChild(timeline.body);
             el.timelines[el.users[user]] = timeline;
+            if(user == 0) {timeline.progressViewed.classList.add("progress-active");timeline.progressViewed.classList.remove("progress-inactive");}
         }
+
+
 
         var scrubber = createElement("div", false, "scrubber", false, false);
         scrubber.innerHTML = '<div class="scrubber-circle"></div>';
@@ -236,10 +243,14 @@ function MoonrainPlayer(selector) {
             this.querySelector(".pause-image").classList.toggle('active');
             
             if(video.paused){
-                    video.play(); 
-                    audio.play() 
-                } else{ video.pause(); audio.pause();}
-            //(audio.paused) ? audio.play() : audio.pause();
+                video.play(); 
+                audio.play() 
+            } 
+            else{ 
+                video.pause(); 
+                audio.pause();
+            }
+
         });
 
 
@@ -278,7 +289,6 @@ function MoonrainPlayer(selector) {
         el.users.forEach(function(element, index){
             users[element] = createElement("div", false, element, false, false);
             blockHide.appendChild(users[element]);
-            //console.log(element);
         });
 
 
@@ -293,7 +303,6 @@ function MoonrainPlayer(selector) {
             
             
             if(element.tagName == "video"){
-               // console.log(video.first);
                 if(video.first == 0){
                     video.first = element.instant;
                     video.src = element.src + element.filename; 
@@ -308,7 +317,6 @@ function MoonrainPlayer(selector) {
             }
 
             if(element.tagName == "audio"){
-               // console.log(audio.first);
                 if(audio.first == 0){
                     audio.first = element.instant;
                     audio.src = element.src + element.filename; 
@@ -327,14 +335,32 @@ function MoonrainPlayer(selector) {
             el.timelines[element.user].body.addEventListener("mousedown", function(){
                 if(element.tagName == "video"){
                     if(video.src !== element.src + element.filename){
-                        video.src = element.src + element.filename;
-                        video.currentDuration = element.duration;
+                        
+                        if(video.paused){
+                            video.src = element.src + element.filename;
+                            video.currentDuration = element.duration;
+                            video.pause();
+                        }
+                        else{
+                            video.src = element.src + element.filename;
+                            video.currentDuration = element.duration;
+                            video.play();
+                        }
+
                     }
                 }
                 if(element.tagName == "audio"){
                     if(audio.src !== element.src + element.filename){
-                        audio.src = element.src + element.filename;
-                        audio.currentDuration = element.duration;
+                        if(audio.paused){
+                            audio.src = element.src + element.filename;
+                            audio.currentDuration = element.duration;
+                            audio.pause();
+                        }
+                        else{
+                            audio.src = element.src + element.filename;
+                            audio.currentDuration = element.duration;
+                            audio.play();
+                        }
                     }
                 }
             });
@@ -348,9 +374,18 @@ function MoonrainPlayer(selector) {
         blockMedia.appendChildren(video, audio, blockControls, blockHide);
         
 
+        //Постоянное отслеживанение состояний видео и аудио (play или pause)
+        /*
+        (function time(){
+            console.log("video.paused: ", video.paused);
+             console.log("audio.paused: ", audio.paused);
+            setTimeout( time , 1000);
+          
+        })();
+        */
+
+
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
 
         var moveListener = function(e){
             document.body.style.cursor = "pointer";
@@ -363,38 +398,53 @@ function MoonrainPlayer(selector) {
                 el.timelines[name].progressViewed.style.width = mouseX + "px";
             }
 
-            console.log("video.currentTime", video.currentDuration * (mouseX/830));
-            console.log("audio.currentTime", audio.currentDuration * (mouseX/830));
+           // console.log("video.currentTime", video.currentDuration * (mouseX/830));
+           // console.log("audio.currentTime", audio.currentDuration * (mouseX/830));
             
-            video.currentTime = audio.currentDuration * (mouseX/830); 
-            audio.currentTime = audio.currentDuration * (mouseX/830); 
+            video.currentTime = audio.currentDuration * (mouseX / 830); 
+            audio.currentTime = audio.currentDuration * (mouseX / 830); 
             
-            /*audio.currentTime = audio.duration/830 * mouseX;*/
         };
 
-        progress.addEventListener('mousedown', function(e){
+
+        video.addEventListener("timeupdate", function() {
+            for(var name in el.timelines){
+                el.timelines[name].progressViewed.style.width = (video.currentTime / video.currentDuration) * 830  + "px";
+            }
+
+            scrubber.style.transform = "translateX(" + (video.currentTime / video.currentDuration) * 830 + "px)";
+        });
+
+
+        video.addEventListener("onseeked", function(e) {
+            alert("Seek operation completed!");
+        });
+
+
+        progress.addEventListener('mousedown', function(e) {
             moveListener(e);
             document.addEventListener('mousemove', moveListener,  false);
         }, false);
+
 
         scrubber.addEventListener('mousedown', function(e) {
             moveListener(e);
             document.addEventListener('mousemove', moveListener,  false);
         }, false);
 
+
         document.addEventListener('mouseup', function(e) {
             document.body.style.cursor = "auto";
             document.removeEventListener('mousemove', moveListener,  false);
-
-            console.log("UP!");
-
+            //console.log("UP!");
         }, false);
 
-        buttonVolumeInput.addEventListener('input', function()
-        {
+
+        buttonVolumeInput.addEventListener('input', function(e) {
             audio.volume = this.value;
             console.log(audio.volume);
         });
+
 
         buttonFullscreen.addEventListener('click', function(e) {
             console.log("OK!", video);
@@ -422,14 +472,7 @@ function MoonrainPlayer(selector) {
         return blockMedia;
     }
 
+    // Запуск компонентов библиотеки
 
-
-
-
-
-
-
-
- // Запуск компонентов библиотеки
     this.init();
 }
