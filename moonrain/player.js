@@ -173,33 +173,38 @@ function MoonrainPlayer(selector) {
             speeker.video.forEach(function(video){
                 video.html = createMediaElement("video",video.filename, object.src, "video/webm");
                 object.appendChild(video.html);
-                xxx(video);
-            });
+                addElementAfterLoadDuration(object, video);
+                });
+
             speeker.audio.forEach(function(audio){
                 audio.html = createMediaElement("audio",audio.filename, object.src, "audio/mp3");
                 object.appendChild(audio.html);
-                xxx(audio);
+                addElementAfterLoadDuration(object, audio);
             });
         });
         return object;
     }
 
-    function xxx(objectElement){
+    function addElementAfterLoadDuration(object, objectElement){
         objectElement.html.addEventListener("loadedmetadata", function(){
             objectElement.duration = this.duration;
+            object.appendChild(objectElement.html);
         });
     }
+
     function removeElementWithoutDuration(object){
         object.speekers.forEach(function(speeker){
             speeker.video.forEach(function(video){
                 if(!video.duration) {
-                    video.html.parentNode.removeChild(video.html)
+                    console.log("remove", video);
+                    video.html.parentNode.removeChild(video.html);
                 }
             });
-            speeker.audio.forEach(function(audio, index){
+            speeker.audio.forEach(function(audio){
                 if(!audio.duration) {
-                    audio.html.parentNode.removeChild(audio.html)
-                    
+                    console.log("remove", audio);
+                    audio.html.parentNode.removeChild(audio.html);
+
                 }
             });
         });
