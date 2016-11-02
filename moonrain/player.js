@@ -125,7 +125,7 @@ function MoonrainPlayer(selector) {
             HTMLElement.dataset.status = key;
 
     //        playerConstructor(HTMLElement);
-            getDuration(getData(HTMLElement));
+            console.log(removeElementWithoutDuration(getDuration(getData(HTMLElement))).speekers);
 
 
 
@@ -171,15 +171,40 @@ function MoonrainPlayer(selector) {
     function getDuration(object){
         object.speekers.forEach(function(speeker){
             speeker.video.forEach(function(video){
-                object.appendChild(createMediaElement("video",video.filename, object.src, "video/webm"));
+                video.html = createMediaElement("video",video.filename, object.src, "video/webm");
+                object.appendChild(video.html);
+                xxx(video);
             });
             speeker.audio.forEach(function(audio){
-                object.appendChild(createMediaElement("audio",audio.filename, object.src, "audio/mp3"));
+                audio.html = createMediaElement("audio",audio.filename, object.src, "audio/mp3");
+                object.appendChild(audio.html);
+                xxx(audio);
             });
         });
+        return object;
     }
 
-
+    function xxx(objectElement){
+        objectElement.html.addEventListener("loadedmetadata", function(){
+            objectElement.duration = this.duration;
+        });
+    }
+    function removeElementWithoutDuration(object){
+        object.speekers.forEach(function(speeker){
+            speeker.video.forEach(function(video){
+                if(!video.duration) {
+                    video.html.parentNode.removeChild(video.html)
+                }
+            });
+            speeker.audio.forEach(function(audio, index){
+                if(!audio.duration) {
+                    audio.html.parentNode.removeChild(audio.html)
+                    
+                }
+            });
+        });
+        return object;
+    }
 
     function playerConstructor(HTMLElement){
 
