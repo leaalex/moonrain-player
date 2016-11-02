@@ -5,6 +5,7 @@ function MoonrainPlayer(selector) {
     var key = genID("key");
     var mediaObject = [];
     var selectorDefault = ".moonrainplayer";
+    var playerObjects = [];
 
 
     // Препроверки
@@ -122,9 +123,12 @@ function MoonrainPlayer(selector) {
           //  console.log(element);
 
             HTMLElement.dataset.status = key;
-            constructor(HTMLElement);
 
-            console.log(getData(HTMLElement));
+    //        playerConstructor(HTMLElement);
+            getDuration(getData(HTMLElement));
+
+
+
         });
 
 
@@ -144,7 +148,9 @@ function MoonrainPlayer(selector) {
         return mediaObject;
     };
     function getData(HTMLElement){
-        var element = {};
+        var element = HTMLElement;
+        element.src = HTMLElement.dataset.src;
+
         element.speekers = getObjectJSON("https://crossorigin.me/" + HTMLElement.dataset.src + "endpoints.json");
         var JSONObject = getObjectJSON("https://crossorigin.me/" + HTMLElement.dataset.src + "metadata.json");
 
@@ -162,7 +168,20 @@ function MoonrainPlayer(selector) {
         return element;
     }
 
-    function constructor(HTMLElement){
+    function getDuration(object){
+        object.speekers.forEach(function(speeker){
+            speeker.audio.forEach(function(audio){
+                object.appendChild(createMediaElement("audio",audio.filename, object.src, "audio/mp3"));
+            });
+            speeker.video.forEach(function(video){
+                object.appendChild(createMediaElement("video",video.filename, object.src, "video/webm"));
+            });
+        });
+    }
+
+
+
+    function playerConstructor(HTMLElement){
 
         var element = {};
         element.html = HTMLElement;
