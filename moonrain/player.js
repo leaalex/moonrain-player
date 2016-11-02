@@ -170,11 +170,11 @@ function MoonrainPlayer(selector) {
 
     function getDuration(object){
         object.speekers.forEach(function(speeker){
-            speeker.audio.forEach(function(audio){
-                object.appendChild(createMediaElement("audio",audio.filename, object.src, "audio/mp3"));
-            });
             speeker.video.forEach(function(video){
                 object.appendChild(createMediaElement("video",video.filename, object.src, "video/webm"));
+            });
+            speeker.audio.forEach(function(audio){
+                object.appendChild(createMediaElement("audio",audio.filename, object.src, "audio/mp3"));
             });
         });
     }
