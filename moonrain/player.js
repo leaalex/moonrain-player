@@ -125,7 +125,7 @@ function MoonrainPlayer(selector) {
             HTMLElement.dataset.status = key;
 
     //        playerConstructor(HTMLElement);
-            console.log(removeElementWithoutDuration(getDuration(getData(HTMLElement))).speekers);
+            mediaObject = removeElementWithoutDuration(getDuration(getData(HTMLElement)));
 
 
 
@@ -188,7 +188,8 @@ function MoonrainPlayer(selector) {
     function addElementAfterLoadDuration(object, objectElement){
         objectElement.html.addEventListener("loadedmetadata", function(){
             objectElement.duration = this.duration;
-            object.appendChild(objectElement.html);
+            console.log("add",objectElement.html )
+            //object.appendChild(objectElement.html);
         });
     }
 
@@ -542,5 +543,4 @@ function MoonrainPlayer(selector) {
 
     // Запуск компонентов библиотеки
 
-    this.init();
 }
