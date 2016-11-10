@@ -185,6 +185,7 @@ function MoonrainPlayer(selector) {
     function addElementAfterLoadDuration(object, objectElement){
         objectElement.html.addEventListener("loadedmetadata", function(){
             objectElement.duration = this.duration;
+            objectElement.timelineHtml = createElement("div",false ,false, false,false)
             console.log("add", objectElement);
 
 
@@ -221,6 +222,7 @@ function MoonrainPlayer(selector) {
 
         if(!object.querySelector(".timeline")) {var timeline = createElement("div", false, "timeline", false, false);
         object.appendChild(timeline)};
+        var timeline = object.querySelector(".timeline")
 
         var arr = object.speakers.filter(function(speaker){
             return speaker.id == objectElement.endpointId
@@ -229,7 +231,23 @@ function MoonrainPlayer(selector) {
             return element.duration
         })
         arr[0][objectElement.mediaType+"Duration"] = (x[x.length - 1].instant - x[0].instant)/1000 + x[x.length - 1].duration;
+        if (!timeline.querySelector("#speaker_"+objectElement.endpointId)){
+            var line = createElement("div", "speaker_"+objectElement.endpointId, "item-timeline", false, false);
+            timeline.appendChild(line);
+        }
+        var line = timeline.querySelector("#speaker_"+objectElement.endpointId);
 
+        if(!line.querySelector(".video-timeline")){
+            var videoLine =  createElement("div", false, "video-timeline", false, false);
+            line.appendChild(videoLine);
+        }
+        var videoLine = line.querySelector(".video-timeline")
+            if(!line.querySelector(".audio-timeline")){
+                var audioLine =  createElement("div", false, "audio-timeline", false, false);
+                line.appendChild(audioLine);
+        }
+        var audioLine = line.querySelector(".audio-timeline")
+        
 
         //console.info(x[0][objectElement.mediaType]);
         console.info(object.speakers);
