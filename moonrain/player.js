@@ -184,6 +184,8 @@ function MoonrainPlayer(selector) {
         objectElement.html.addEventListener("loadedmetadata", function(){
             objectElement.duration = this.duration;
             console.log("add", object);
+
+             
             //object.appendChild(objectElement.html);
             timelineConstructor2(object, objectElement);
         });
@@ -220,7 +222,7 @@ function MoonrainPlayer(selector) {
 
         object.speakers.forEach(function(speaker){
 
-            
+
 
             var line = createElement("div", "speaker"+speaker.id, "item-timeline", false, false);
             var videoLine =  createElement("div", false, "video-timeline", false, false);
@@ -229,14 +231,14 @@ function MoonrainPlayer(selector) {
             timeline.appendChild(line);
 
             speaker.video.forEach(function(video){
-                if(video.duration) {
+                if(video.duration){
                     var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
                     videoLine.appendChild(timeLineBlock);
                 }
             });
 
             speaker.audio.forEach(function(audio){
-                if(audio.duration) {
+                if(audio.duration){
                     var timeLineBlock = createElement("div", false, "audio-block-timeline", false, false);
                     audioLine.appendChild(timeLineBlock);
                 }
