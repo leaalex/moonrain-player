@@ -121,14 +121,9 @@ function MoonrainPlayer(selector) {
             return HTMLElement.dataset.status === undefined;
         }).forEach(function(HTMLElement, i, array){
           //  console.log(element);
-
             HTMLElement.dataset.status = key;
-
-    //        playerConstructor(HTMLElement);
+            //playerConstructor(HTMLElement);
             mediaObject = removeElementWithoutDuration(getDuration(getData(HTMLElement)));
-
-
-
         });
 
 
@@ -151,32 +146,32 @@ function MoonrainPlayer(selector) {
         var element = HTMLElement;
         element.src = HTMLElement.dataset.src;
 
-        element.speekers = getObjectJSON("https://crossorigin.me/" + HTMLElement.dataset.src + "endpoints.json");
+        element.speakers = getObjectJSON("https://crossorigin.me/" + HTMLElement.dataset.src + "endpoints.json");
         var JSONObject = getObjectJSON("https://crossorigin.me/" + HTMLElement.dataset.src + "metadata.json");
 
-        element.speekers.forEach(function(speeker){
-            speeker.audio = JSONObject.audio.filter(function(audio){
-                return audio.endpointId == speeker.id;
+        element.speakers.forEach(function(speaker){
+            speaker.audio = JSONObject.audio.filter(function(audio){
+                return audio.endpointId == speaker.id;
             });
-            speeker.video = JSONObject.video.filter(function(video){
-                return video.endpointId == speeker.id && video.type == "RECORDING_STARTED";
+            speaker.video = JSONObject.video.filter(function(video){
+                return video.endpointId == speaker.id && video.type == "RECORDING_STARTED";
             });
-            speeker.change = JSONObject.video.filter(function(video){
-                return video.endpointId == speeker.id && video.type == "SPEAKER_CHANGED";
+            speaker.change = JSONObject.video.filter(function(video){
+                return video.endpointId == speaker.id && video.type == "SPEAKER_CHANGED";
             });
         });
         return element;
     }
 
     function getDuration(object){
-        object.speekers.forEach(function(speeker){
-            speeker.video.forEach(function(video){
+        object.speakers.forEach(function(speaker){
+            speaker.video.forEach(function(video){
                 video.html = createMediaElement("video",video.filename, object.src, "video/webm");
                 object.appendChild(video.html);
                 addElementAfterLoadDuration(object, video);
                 });
 
-            speeker.audio.forEach(function(audio){
+            speaker.audio.forEach(function(audio){
                 audio.html = createMediaElement("audio",audio.filename, object.src, "audio/mp3");
                 object.appendChild(audio.html);
                 addElementAfterLoadDuration(object, audio);
@@ -188,20 +183,24 @@ function MoonrainPlayer(selector) {
     function addElementAfterLoadDuration(object, objectElement){
         objectElement.html.addEventListener("loadedmetadata", function(){
             objectElement.duration = this.duration;
-            console.log("add",objectElement.html )
+            console.log("add", object);
             //object.appendChild(objectElement.html);
+            timelineConstructor2(object, objectElement);
         });
     }
 
+
+
+
     function removeElementWithoutDuration(object){
-        object.speekers.forEach(function(speeker){
-            speeker.video.forEach(function(video){
+        object.speakers.forEach(function(speaker){
+            speaker.video.forEach(function(video){
                 if(!video.duration) {
                     console.log("remove", video);
                     video.html.parentNode.removeChild(video.html);
                 }
             });
-            speeker.audio.forEach(function(audio){
+            speaker.audio.forEach(function(audio){
                 if(!audio.duration) {
                     console.log("remove", audio);
                     audio.html.parentNode.removeChild(audio.html);
@@ -210,6 +209,74 @@ function MoonrainPlayer(selector) {
             });
         });
         return object;
+    }
+
+    function timelineConstructor2(object){
+
+        object.innerHTML = "";
+
+        var timeline = createElement("div", false, "timeline", false, false);
+        object.appendChild(timeline);
+
+        object.speakers.forEach(function(speaker){
+
+            
+
+            var line = createElement("div", "speaker"+speaker.id, "item-timeline", false, false);
+            var videoLine =  createElement("div", false, "video-timeline", false, false);
+            var audioLine =  createElement("div", false, "audio-timeline", false, false);
+            line.appendChildren(videoLine, audioLine);
+            timeline.appendChild(line);
+
+            speaker.video.forEach(function(video){
+                if(video.duration) {
+                    var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
+                    videoLine.appendChild(timeLineBlock);
+                }
+            });
+
+            speaker.audio.forEach(function(audio){
+                if(audio.duration) {
+                    var timeLineBlock = createElement("div", false, "audio-block-timeline", false, false);
+                    audioLine.appendChild(timeLineBlock);
+                }
+            });
+
+        });
+
+    }
+
+    function timelineConstructor(object, objectElement){
+       
+        
+        var line = object.querySelector(".timeline").querySelector("#speaker" + objectElement.endpointId);
+        if(line){
+            if(objectElement.mediaType == "video"){
+                    var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
+                    line.querySelector(".video-timeline").appendChild(timeLineBlock);
+            }
+            else{
+                    var timeLineBlock = createElement("div", false, "audio-block-timeline", false, false);
+                    line.querySelector(".audio-timeline").appendChild(timeLineBlock);
+            }
+        }
+        else{
+            var newTimeline =  createElement("div", "speaker" + objectElement.endpointId, "item-timeline", false, false);
+            var videoLine =  createElement("div", false, "video-timeline", false, false);
+            var audioLine =  createElement("div", false, "audio-timeline", false, false);
+            
+            if(objectElement.mediaType == "video"){
+                    var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
+                    videoLine.appendChild(timeLineBlock);
+            }
+            else{
+                    var timeLineBlock = createElement("div", false, "audio-block-timeline", false, false);
+                    audioLine.appendChild(timeLineBlock);
+            }
+
+            newTimeline.appendChildren(videoLine, audioLine);
+            object.querySelector(".timeline").appendChild(newTimeline);
+        }
     }
 
     function playerConstructor(HTMLElement){

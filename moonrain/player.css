@@ -4,6 +4,39 @@
 	display: block;
 }
 
+.item-timeline{
+	width: 800px;
+	height: 20px;
+	background-color: gray;
+	margin-top: 15px;
+}
+.video-timeline{
+		width: 800px;
+	height: 10px;
+	background-color: gray;
+}
+
+.audio-timeline{
+	width: 800px;
+	height: 10px;
+	background-color: gray;
+}
+
+.video-block-timeline{
+	display: inline-block;
+	height: 10px;
+	width: 49px;
+	border-right:  1px solid black;
+	background-color: blue;
+}
+.audio-block-timeline{
+	display: inline-block;
+	height: 10px;
+	width: 49px;
+	border-right:  1px solid black;
+	background-color: yellow;
+}
+
 
 	.hide-videos{
 		display: none;
