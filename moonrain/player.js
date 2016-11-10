@@ -159,6 +159,8 @@ function MoonrainPlayer(selector) {
             speaker.change = JSONObject.video.filter(function(video){
                 return video.endpointId == speaker.id && video.type == "SPEAKER_CHANGED";
             });
+            speaker.audioDuration = 0;
+            speaker.videoDuration = 0;
         });
         return element;
     }
@@ -183,11 +185,11 @@ function MoonrainPlayer(selector) {
     function addElementAfterLoadDuration(object, objectElement){
         objectElement.html.addEventListener("loadedmetadata", function(){
             objectElement.duration = this.duration;
-            console.log("add", object);
+            console.log("add", objectElement);
 
-             
+
             //object.appendChild(objectElement.html);
-            timelineConstructor2(object, objectElement);
+            timelineConstructor3(object, objectElement);
         });
     }
 
@@ -212,6 +214,27 @@ function MoonrainPlayer(selector) {
         });
         return object;
     }
+
+
+
+    function timelineConstructor3(object, objectElement){
+
+        if(!object.querySelector(".timeline")) {var timeline = createElement("div", false, "timeline", false, false);
+        object.appendChild(timeline)};
+
+        var arr = object.speakers.filter(function(speaker){
+            return speaker.id == objectElement.endpointId
+        });
+        var x = arr[0][objectElement.mediaType].filter(function(element){
+            return element.duration
+        })
+        arr[0][objectElement.mediaType+"Duration"] = (x[x.length - 1].instant - x[0].instant)/1000 + x[x.length - 1].duration;
+
+
+        //console.info(x[0][objectElement.mediaType]);
+        console.info(object.speakers);
+    }
+
 
     function timelineConstructor2(object){
 
@@ -249,8 +272,8 @@ function MoonrainPlayer(selector) {
     }
 
     function timelineConstructor(object, objectElement){
-       
-        
+
+
         var line = object.querySelector(".timeline").querySelector("#speaker" + objectElement.endpointId);
         if(line){
             if(objectElement.mediaType == "video"){
@@ -266,7 +289,7 @@ function MoonrainPlayer(selector) {
             var newTimeline =  createElement("div", "speaker" + objectElement.endpointId, "item-timeline", false, false);
             var videoLine =  createElement("div", false, "video-timeline", false, false);
             var audioLine =  createElement("div", false, "audio-timeline", false, false);
-            
+
             if(objectElement.mediaType == "video"){
                     var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
                     videoLine.appendChild(timeLineBlock);
