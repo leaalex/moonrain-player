@@ -1,10 +1,10 @@
 
-function MoonrainPlayer(selector) {
 // TODO: this.default = {};
     // Переменные
     var key = genID("key");
     var mediaObject = [];
     var selectorDefault = ".moonrainplayer";
+    var playerObjects = [];
 
 
     // Препроверки
@@ -120,9 +120,9 @@ function MoonrainPlayer(selector) {
             return HTMLElement.dataset.status === undefined;
         }).forEach(function(HTMLElement, i, array){
           //  console.log(element);
-
             HTMLElement.dataset.status = key;
-            constructor(HTMLElement);
+            //playerConstructor(HTMLElement);
+            mediaObject = removeElementWithoutDuration(getDuration(getData(HTMLElement)));
         });
 
 
@@ -141,24 +141,197 @@ function MoonrainPlayer(selector) {
         /*start();*/
         return mediaObject;
     };
+    function getData(HTMLElement){
+        var element = HTMLElement;
+        element.src = HTMLElement.dataset.src;
+
+        element.speakers = getObjectJSON("https://crossorigin.me/" + HTMLElement.dataset.src + "endpoints.json");
+        var JSONObject = getObjectJSON("https://crossorigin.me/" + HTMLElement.dataset.src + "metadata.json");
+
+        element.speakers.forEach(function(speaker){
+            speaker.audio = JSONObject.audio.filter(function(audio){
+                return audio.endpointId == speaker.id;
+            });
+            speaker.video = JSONObject.video.filter(function(video){
+                return video.endpointId == speaker.id && video.type == "RECORDING_STARTED";
+            });
+            speaker.change = JSONObject.video.filter(function(video){
+                return video.endpointId == speaker.id && video.type == "SPEAKER_CHANGED";
+            });
+            speaker.audioDuration = 0;
+            speaker.videoDuration = 0;
+        });
+        return element;
+    }
+
+    function getDuration(object){
+        object.speakers.forEach(function(speaker){
+            speaker.video.forEach(function(video){
+                video.html = createMediaElement("video",video.filename, object.src, "video/webm");
+                object.appendChild(video.html);
+                addElementAfterLoadDuration(object, video);
+                });
+
+            speaker.audio.forEach(function(audio){
+                audio.html = createMediaElement("audio",audio.filename, object.src, "audio/mp3");
+                object.appendChild(audio.html);
+                addElementAfterLoadDuration(object, audio);
+            });
+        });
+        return object;
+    }
+
+    function addElementAfterLoadDuration(object, objectElement){
+        objectElement.html.addEventListener("loadedmetadata", function(){
+            objectElement.duration = this.duration;
+            objectElement.timelineHtml = createElement("div",false ,false, false,false)
+            console.log("add", objectElement);
 
 
-    function constructor(HTMLElement){
+            //object.appendChild(objectElement.html);
+            timelineConstructor3(object, objectElement);
+        });
+    }
+
+
+
+
+    function removeElementWithoutDuration(object){
+        object.speakers.forEach(function(speaker){
+            speaker.video.forEach(function(video){
+                if(!video.duration) {
+                    console.log("remove", video);
+                    video.html.parentNode.removeChild(video.html);
+                }
+            });
+            speaker.audio.forEach(function(audio){
+                if(!audio.duration) {
+                    console.log("remove", audio);
+                    audio.html.parentNode.removeChild(audio.html);
+
+                }
+            });
+        });
+        return object;
+    }
+
+
+
+    function timelineConstructor3(object, objectElement){
+
+        if(!object.querySelector(".timeline")) {var timeline = createElement("div", false, "timeline", false, false);
+        object.appendChild(timeline)};
+        var timeline = object.querySelector(".timeline")
+
+        var arr = object.speakers.filter(function(speaker){
+            return speaker.id == objectElement.endpointId
+        });
+        var x = arr[0][objectElement.mediaType].filter(function(element){
+            return element.duration
+        })
+        arr[0][objectElement.mediaType+"Duration"] = (x[x.length - 1].instant - x[0].instant)/1000 + x[x.length - 1].duration;
+        if (!timeline.querySelector("#speaker_"+objectElement.endpointId)){
+            var line = createElement("div", "speaker_"+objectElement.endpointId, "item-timeline", false, false);
+            timeline.appendChild(line);
+        }
+        var line = timeline.querySelector("#speaker_"+objectElement.endpointId);
+
+        if(!line.querySelector(".video-timeline")){
+            var videoLine =  createElement("div", false, "video-timeline", false, false);
+            line.appendChild(videoLine);
+        }
+        var videoLine = line.querySelector(".video-timeline")
+            if(!line.querySelector(".audio-timeline")){
+                var audioLine =  createElement("div", false, "audio-timeline", false, false);
+                line.appendChild(audioLine);
+        }
+        var audioLine = line.querySelector(".audio-timeline")
+
+
+        //console.info(x[0][objectElement.mediaType]);
+        console.info(object.speakers);
+    }
+
+
+    function timelineConstructor2(object){
+
+        object.innerHTML = "";
+
+        var timeline = createElement("div", false, "timeline", false, false);
+        object.appendChild(timeline);
+
+        object.speakers.forEach(function(speaker){
+
+
+
+            var line = createElement("div", "speaker"+speaker.id, "item-timeline", false, false);
+            var videoLine =  createElement("div", false, "video-timeline", false, false);
+            var audioLine =  createElement("div", false, "audio-timeline", false, false);
+            line.appendChildren(videoLine, audioLine);
+            timeline.appendChild(line);
+
+            speaker.video.forEach(function(video){
+                if(video.duration){
+                    var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
+                    videoLine.appendChild(timeLineBlock);
+                }
+            });
+
+            speaker.audio.forEach(function(audio){
+                if(audio.duration){
+                    var timeLineBlock = createElement("div", false, "audio-block-timeline", false, false);
+                    audioLine.appendChild(timeLineBlock);
+                }
+            });
+
+        });
+
+    }
+
+    function timelineConstructor(object, objectElement){
+
+
+        var line = object.querySelector(".timeline").querySelector("#speaker" + objectElement.endpointId);
+        if(line){
+            if(objectElement.mediaType == "video"){
+                    var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
+                    line.querySelector(".video-timeline").appendChild(timeLineBlock);
+            }
+            else{
+                    var timeLineBlock = createElement("div", false, "audio-block-timeline", false, false);
+                    line.querySelector(".audio-timeline").appendChild(timeLineBlock);
+            }
+        }
+        else{
+            var newTimeline =  createElement("div", "speaker" + objectElement.endpointId, "item-timeline", false, false);
+            var videoLine =  createElement("div", false, "video-timeline", false, false);
+            var audioLine =  createElement("div", false, "audio-timeline", false, false);
+
+            if(objectElement.mediaType == "video"){
+                    var timeLineBlock = createElement("div", false, "video-block-timeline", false, false);
+                    videoLine.appendChild(timeLineBlock);
+            }
+            else{
+                    var timeLineBlock = createElement("div", false, "audio-block-timeline", false, false);
+                    audioLine.appendChild(timeLineBlock);
+            }
+
+            newTimeline.appendChildren(videoLine, audioLine);
+            object.querySelector(".timeline").appendChild(newTimeline);
+        }
+    }
+
+    function playerConstructor(HTMLElement){
 
         var element = {};
         element.html = HTMLElement;
         element.media = [];
         element.users = [];
-        element.speakerChange = []
+        element.speakerChange = [];
 
         mediaObject.push(element);
-
         var JSONObject = getObjectJSON("https://crossorigin.me/" + element.html.dataset.src + "metadata.json");
         var media = JSONObject.video.concat(JSONObject.audio);
-
-        console.info("video: ", JSONObject.video);
-        console.info("video: ", (JSONObject.video[0].instant-JSONObject.video[2].instant)/1000);
-        console.info("audio: ", JSONObject.audio);
 
 
         media.forEach(function(el){
@@ -179,7 +352,7 @@ function MoonrainPlayer(selector) {
             }
         });
 
-       console.log(element);
+
         element.html.appendChild(createPlayer(element));
     }
 
@@ -303,7 +476,7 @@ function MoonrainPlayer(selector) {
 
             HTMLElement.addEventListener("loadedmetadata", function(){
                 users[element.user].appendChild(this);
-                console.log(element.tagName, index, element.user, element.instant, element.filename, HTMLElement.duration);
+                console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
                 element.duration = HTMLElement.duration;
 
 
@@ -478,6 +651,3 @@ function MoonrainPlayer(selector) {
     }
 
     // Запуск компонентов библиотеки
-
-    this.init();
-}

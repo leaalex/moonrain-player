@@ -1,0 +1,7 @@
+body {
+  background-color: #000; }
+  body div {
+    margin: 0;
+    padding: 0; }
+  body p {
+    border: 2px solid black; }
