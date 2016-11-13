@@ -156,6 +156,11 @@ function MoonrainPlayer(selector) {
         var JSONObject = getObjectJSON("https://crossorigin.me/" + element.html.dataset.src + "metadata.json");
         var media = JSONObject.video.concat(JSONObject.audio);
 
+        console.info("video: ", JSONObject.video);
+        console.info("video: ", (JSONObject.video[0].instant-JSONObject.video[2].instant)/1000);
+        console.info("audio: ", JSONObject.audio);
+
+
         media.forEach(function(el){
             if(el.filename !== undefined){
                 if(!element.users.includes(el.endpointId)) element.users.push(el.endpointId);
@@ -241,13 +246,13 @@ function MoonrainPlayer(selector) {
 
             this.querySelector(".play-image").classList.toggle('active');
             this.querySelector(".pause-image").classList.toggle('active');
-            
+
             if(video.paused){
-                video.play(); 
-                audio.play() 
-            } 
-            else{ 
-                video.pause(); 
+                video.play();
+                audio.play()
+            }
+            else{
+                video.pause();
                 audio.pause();
             }
 
@@ -298,34 +303,34 @@ function MoonrainPlayer(selector) {
 
             HTMLElement.addEventListener("loadedmetadata", function(){
                 users[element.user].appendChild(this);
-                console.log(element.tagName, index, element.user, element.instant, HTMLElement.duration);
+                console.log(element.tagName, index, element.user, element.instant, element.filename, HTMLElement.duration);
                 element.duration = HTMLElement.duration;
-            
-            
+
+
             if(element.tagName == "video"){
                 if(video.first == 0){
                     video.first = element.instant;
-                    video.src = element.src + element.filename; 
-                    video.currentDuration = element.duration;   
-                }    
+                    video.src = element.src + element.filename;
+                    video.currentDuration = element.duration;
+                }
 
                 if (video.first > element.instant){
                     console.warn("video.src", video.src, element.instant);
-                    video.src = element.src + element.filename; 
-                    video.currentDuration = element.duration;                     
+                    video.src = element.src + element.filename;
+                    video.currentDuration = element.duration;
                 }
             }
 
             if(element.tagName == "audio"){
                 if(audio.first == 0){
                     audio.first = element.instant;
-                    audio.src = element.src + element.filename; 
-                    audio.currentDuration = element.duration;   
-                }    
+                    audio.src = element.src + element.filename;
+                    audio.currentDuration = element.duration;
+                }
                 if (audio.first > element.instant){
                     console.warn("audio.src", audio.src, element.instant);
-                    audio.src = element.src + element.filename; 
-                    audio.currentDuration = element.duration;                     
+                    audio.src = element.src + element.filename;
+                    audio.currentDuration = element.duration;
                 }
             }
 
@@ -335,7 +340,7 @@ function MoonrainPlayer(selector) {
             el.timelines[element.user].body.addEventListener("mousedown", function(){
                 if(element.tagName == "video"){
                     if(video.src !== element.src + element.filename){
-                        
+
                         if(video.paused){
                             video.src = element.src + element.filename;
                             video.currentDuration = element.duration;
@@ -364,7 +369,7 @@ function MoonrainPlayer(selector) {
                     }
                 }
             });
-        
+
 
 
 
@@ -372,7 +377,7 @@ function MoonrainPlayer(selector) {
 
 
         blockMedia.appendChildren(video, audio, blockControls, blockHide);
-        
+
 
         //Постоянное отслеживанение состояний видео и аудио (play или pause)
         /*
@@ -380,7 +385,7 @@ function MoonrainPlayer(selector) {
             console.log("video.paused: ", video.paused);
              console.log("audio.paused: ", audio.paused);
             setTimeout( time , 1000);
-          
+
         })();
         */
 
@@ -393,17 +398,17 @@ function MoonrainPlayer(selector) {
             (e.clientX - 19 < 0) ? mouseX = 0: (e.clientX - 19 > 830) ? mouseX = 830: mouseX = e.clientX - 19;
 
             scrubber.style.transform = "translateX(" + mouseX + "px)";
-            
+
             for(var name in el.timelines){
                 el.timelines[name].progressViewed.style.width = mouseX + "px";
             }
 
            // console.log("video.currentTime", video.currentDuration * (mouseX/830));
            // console.log("audio.currentTime", audio.currentDuration * (mouseX/830));
-            
-            video.currentTime = audio.currentDuration * (mouseX / 830); 
-            audio.currentTime = audio.currentDuration * (mouseX / 830); 
-            
+
+            video.currentTime = audio.currentDuration * (mouseX / 830);
+            audio.currentTime = audio.currentDuration * (mouseX / 830);
+
         };
 
 
