@@ -1,21 +1,3 @@
-    // +++++++++++++++++
-    // Временные функции
-    // +++++++++++++++++
-    function checkStop(){
-        var dataActiveCount = 0;
-        document.querySelectorAll(selector).forEach(function(elem, index){
-            if (elem.dataset.status == key){
-                dataActiveCount = index;
-            }
-        });
-        //console.info("Сравнение: ", document.querySelectorAll(selector).length - 1, dataActiveCount);
-        if (document.querySelectorAll(selector).length - 1 == dataActiveCount){
-            clearTimeout(timeOut);
-        }
-    }
-
-
-
     // Основные функции
 
     // Функция проверки запущен ли другой экзкмнляр библиотеки
@@ -51,14 +33,7 @@
     }
 
 
-    // Основные методы
 
-    // Инициализация библиотеки и возращене медиаобъектов
-    this.init = function(){
-        check(selector);
-        /*start();*/
-        return mediaObject;
-    };
 
     function getData(HTMLElement){
         var element = HTMLElement;

@@ -1,4 +1,4 @@
-//= lib/test.js
+
 //= lib/model.js
 function MoonrainPlayer(selector) {
 
@@ -6,6 +6,8 @@ function MoonrainPlayer(selector) {
 //= lib/variables.js
 //= lib/additional-methods.js
 //= lib/additional-functions.js
+
+//= lib/test.js
 
 //= lib/player.js
 //= lib/methods.js
