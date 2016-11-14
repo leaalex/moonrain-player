@@ -47,8 +47,8 @@ var path = {
 gulp.task('js:build', function () {
     gulp.src(path.app.js) //Найдем наш main файл
         .pipe(rigger()) //Прогоним через rigger
-        .pipe(sourcemaps.init()) //Инициализируем sourcemap
-        .pipe(sourcemaps.write())//Пропишем карты
+//        .pipe(sourcemaps.init()) //Инициализируем sourcemap
+//        .pipe(sourcemaps.write())//Пропишем карты
         .pipe(gulp.dest(path.build.js)); //Выплюнем готовый файл в build
 });
 
