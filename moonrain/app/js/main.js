@@ -8,6 +8,7 @@ function MoonrainPlayer(selector) {
 //= lib/additional-functions.js
 
 //= lib/test.js
+//= lib/functions.js
 
 //= lib/player.js
 //= lib/methods.js
